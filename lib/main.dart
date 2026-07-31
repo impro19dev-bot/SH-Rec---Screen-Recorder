@@ -14,11 +14,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await themeController.load();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const ShieldRecApp());
+  runApp(const ShRecApp());
 }
 
-class ShieldRecApp extends StatelessWidget {
-  const ShieldRecApp({super.key});
+class ShRecApp extends StatelessWidget {
+  const ShRecApp({super.key});
 
   @override
   Widget build(BuildContext context) {

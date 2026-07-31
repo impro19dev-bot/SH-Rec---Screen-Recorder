@@ -118,7 +118,7 @@ abstract final class PrivacyShareGuard {
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    'Tip: Share your safe export from Privacy Studio for best protection.',
+                    'Tip: Share your safe export from Shield Studio for best protection.',
                     style: TextStyle(
                       fontSize: 13,
                       color: AppColors.privacyTealDark,

@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Opens the system Photos app as a fallback (cannot deep-link to a single asset on iOS).
 class PhotosLauncherService {
-  static const MethodChannel _channel = MethodChannel('xrecorder/photos');
+  static const MethodChannel _channel = MethodChannel('azrecorder/photos');
 
   Future<bool> openInPhotos(AssetEntity video) async {
     if (Platform.isIOS) {

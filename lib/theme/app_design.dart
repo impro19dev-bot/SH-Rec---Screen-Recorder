@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Layout and shape tokens for the Vault UI.
+/// Layout and shape tokens.
 abstract final class AppDesign {
   static const double radiusXs = 6;
   static const double radiusSm = 10;

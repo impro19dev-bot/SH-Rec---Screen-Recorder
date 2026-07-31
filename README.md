@@ -14,8 +14,8 @@ Record locally, then use Shield Studio to scan for sensitive text, blur regions,
 
 ## Identifiers
 
-- Bundle ID: `com.azrecorder.screenrecorderr`
-- App Group: `group.com.azrecorder.screenrecorder.shared`
+- Bundle ID: `com.azrecorder.screenrecording`
+- App Group: `group.com.azrecorder.screenrecorder.sharedPreferences`
 
 See [docs/app_store_submission.md](docs/app_store_submission.md) for App Store copy and checklist.
 

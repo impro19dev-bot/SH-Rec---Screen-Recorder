@@ -56,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text('Privacy Policy'),
         content: const SingleChildScrollView(
           child: Text(
-            'ShieldRec saves screen recordings to your device Photos library. '
+            'SH Rec saves screen recordings to your device Photos library. '
             'Recordings stay on your device unless you choose to share them.\n\n'
             'Shield Studio scans for emails and phone numbers on-device, lets you '
             'add blur regions, and can export a redacted copy — no account required '
@@ -168,6 +168,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _MenuTile(
           icon: Icons.support_agent_outlined,
           title: 'Contact support',
+          subtitle: AppConfig.supportEmail,
+          onTap: () => _openUrl(AppConfig.supportEmailUrl),
+        ),
+        _MenuTile(
+          icon: Icons.language_outlined,
+          title: 'Help center',
           onTap: () => _openUrl(AppConfig.supportUrl),
         ),
         const SizedBox(height: 12),

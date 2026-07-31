@@ -29,14 +29,37 @@ class _GlobalRecordingIndicatorState extends State<GlobalRecordingIndicator>
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
-    )..repeat(reverse: true);
+    );
     _pulseAnimation = Tween<double>(begin: 0.45, end: 1).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
+    widget.controller.addListener(_syncPulse);
+    _syncPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant GlobalRecordingIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_syncPulse);
+      widget.controller.addListener(_syncPulse);
+      _syncPulse();
+    }
+  }
+
+  void _syncPulse() {
+    final active = widget.controller.isActive;
+    if (active && !_pulseController.isAnimating) {
+      _pulseController.repeat(reverse: true);
+    } else if (!active && _pulseController.isAnimating) {
+      _pulseController.stop();
+      _pulseController.value = 1;
+    }
   }
 
   @override
   void dispose() {
+    widget.controller.removeListener(_syncPulse);
     _pulseController.dispose();
     super.dispose();
   }
@@ -65,95 +88,95 @@ class _GlobalRecordingIndicatorState extends State<GlobalRecordingIndicator>
           right: 12,
           child: IgnorePointer(
             child: Material(
-            elevation: 8,
-            shadowColor: AppColors.recordRed.withValues(alpha: 0.45),
-            borderRadius: BorderRadius.circular(AppDesign.radiusMd),
-            color: Colors.transparent,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.recordRed,
-                    AppColors.recordRedGlow.withValues(alpha: 0.95),
+              elevation: 8,
+              shadowColor: AppColors.recordRed.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.circular(AppDesign.radiusMd),
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.recordRed,
+                      AppColors.recordRedGlow.withValues(alpha: 0.95),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(AppDesign.radiusMd),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.25),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    FadeTransition(
+                      opacity: _pulseAnimation,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(AppDesign.radiusXs),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.35),
+                        ),
+                      ),
+                      child: const Text(
+                        'REC',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    if (status.broadcastActive)
+                      Icon(
+                        Icons.cast_rounded,
+                        size: 18,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      )
+                    else if (status.appOnlyRecording)
+                      Icon(
+                        Icons.smartphone_rounded,
+                        size: 18,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      )
+                    else
+                      Icon(
+                        Icons.fiber_manual_record_rounded,
+                        size: 14,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(AppDesign.radiusMd),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.25),
-                ),
-              ),
-              child: Row(
-                children: [
-                  FadeTransition(
-                    opacity: _pulseAnimation,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(AppDesign.radiusXs),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.35),
-                      ),
-                    ),
-                    child: const Text(
-                      'REC',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  if (status.broadcastActive)
-                    Icon(
-                      Icons.cast_rounded,
-                      size: 18,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    )
-                  else if (status.appOnlyRecording)
-                    Icon(
-                      Icons.smartphone_rounded,
-                      size: 18,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    )
-                  else
-                    Icon(
-                      Icons.fiber_manual_record_rounded,
-                      size: 14,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    ),
-                ],
               ),
             ),
-          ),
           ),
         );
       },

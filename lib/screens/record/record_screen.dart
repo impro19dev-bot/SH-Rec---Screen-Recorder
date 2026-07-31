@@ -20,9 +20,14 @@ import '../../widgets/recording_help_dialog.dart';
 import 'broadcast_audio_debug_panel.dart';
 
 class RecordScreen extends StatefulWidget {
-  const RecordScreen({super.key, this.onRecordingSaved});
+  const RecordScreen({
+    super.key,
+    this.onRecordingSaved,
+    this.isTabActive = true,
+  });
 
   final VoidCallback? onRecordingSaved;
+  final bool isTabActive;
 
   @override
   State<RecordScreen> createState() => _RecordScreenState();
@@ -38,6 +43,9 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   bool _isSimulator = false;
   String _statusText = 'Ready to record';
   Timer? _broadcastStatusTimer;
+  Timer? _elapsedTimer;
+  Duration _elapsed = Duration.zero;
+  DateTime? _recordingStartedAt;
   String _previousBroadcastStatus = 'idle';
   BroadcastAudioTestMode _broadcastAudioMode = BroadcastAudioTestMode.micOnly;
   RecordingPreset _preset = RecordingPreset.standard;
@@ -57,9 +65,24 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _checkRuntime();
-    _startBroadcastStatusSync();
+    if (widget.isTabActive) {
+      _startBroadcastStatusSync();
+    }
     if (Platform.isIOS) {
       unawaited(_applyBroadcastAudioModeToNative());
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant RecordScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isTabActive == widget.isTabActive) return;
+    if (widget.isTabActive) {
+      _startBroadcastStatusSync();
+      unawaited(_syncBroadcastStatus());
+    } else {
+      _broadcastStatusTimer?.cancel();
+      _broadcastStatusTimer = null;
     }
   }
 
@@ -71,13 +94,45 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _broadcastStatusTimer?.cancel();
+    _elapsedTimer?.cancel();
     recordingStatusController.clear();
     super.dispose();
   }
 
+  void _syncElapsedTimer({required bool isActive}) {
+    if (isActive) {
+      _recordingStartedAt ??= DateTime.now();
+      _elapsedTimer ??= Timer.periodic(const Duration(seconds: 1), (_) {
+        if (!mounted || _recordingStartedAt == null) return;
+        setState(() {
+          _elapsed = DateTime.now().difference(_recordingStartedAt!);
+        });
+      });
+      return;
+    }
+    _elapsedTimer?.cancel();
+    _elapsedTimer = null;
+    _recordingStartedAt = null;
+    if (_elapsed != Duration.zero) {
+      _elapsed = Duration.zero;
+    }
+  }
+
+  static String _formatElapsed(Duration elapsed) {
+    final hours = elapsed.inHours;
+    final minutes = elapsed.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = elapsed.inSeconds.remainder(60).toString().padLeft(2, '0');
+    if (hours > 0) {
+      return '${hours.toString().padLeft(2, '0')}:$minutes:$seconds';
+    }
+    return '$minutes:$seconds';
+  }
+
   void _publishGlobalRecordingStatus() {
+    final isActive = _isRecording || _broadcastActive;
+    _syncElapsedTimer(isActive: isActive);
     recordingStatusController.update(
-      isActive: _isRecording || _broadcastActive,
+      isActive: isActive,
       isRecording: _isRecording,
       broadcastActive: _broadcastActive,
       appOnlyRecording: _appOnlyRecording,
@@ -225,6 +280,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
       });
     }
 
+    _syncElapsedTimer(isActive: isRecording || broadcastActive);
     recordingStatusController.update(
       isActive: isRecording || broadcastActive,
       isRecording: isRecording,
@@ -333,7 +389,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           'iOS will ask you to confirm screen broadcast.\n\n'
           '1. Tap Continue to open Apple’s broadcast menu.\n'
           '2. Turn Microphone ON (required for audio).\n'
-          '3. Select ShieldRec in the list.\n'
+          '3. Select SH Rec in the list.\n'
           '4. Tap Start Broadcast.\n'
           '5. Stop from the red status bar or Control Center.',
         ),
@@ -593,6 +649,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
               isRecording: _isRecording,
               statusText: _statusText,
               broadcastActive: _broadcastActive,
+              elapsedLabel: isActive ? _formatElapsed(_elapsed) : null,
             ),
           ),
         ),
@@ -695,23 +752,69 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   }
 }
 
-class _CaptureStatusRing extends StatelessWidget {
+class _CaptureStatusRing extends StatefulWidget {
   const _CaptureStatusRing({
     required this.isActive,
     required this.isRecording,
     required this.statusText,
     required this.broadcastActive,
+    this.elapsedLabel,
   });
 
   final bool isActive;
   final bool isRecording;
   final String statusText;
   final bool broadcastActive;
+  final String? elapsedLabel;
+
+  @override
+  State<_CaptureStatusRing> createState() => _CaptureStatusRingState();
+}
+
+class _CaptureStatusRingState extends State<_CaptureStatusRing>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _iconPulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _iconPulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _syncIconPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant _CaptureStatusRing oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isActive != widget.isActive) {
+      _syncIconPulse();
+    }
+  }
+
+  void _syncIconPulse() {
+    if (widget.isActive) {
+      _iconPulse.repeat(reverse: true);
+    } else {
+      _iconPulse.stop();
+      _iconPulse.value = 1;
+    }
+  }
+
+  @override
+  void dispose() {
+    _iconPulse.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final ringColor = isActive ? AppColors.recordRed : palette.accent;
+    final ringColor =
+        widget.isActive ? AppColors.greenAccent : palette.accent;
+    final iconColor =
+        widget.isActive ? AppColors.greenAccent : palette.accent;
 
     return SizedBox(
       width: 220,
@@ -725,12 +828,12 @@ class _CaptureStatusRing extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: ringColor.withValues(alpha: isActive ? 0.5 : 0.2),
+                color: ringColor.withValues(alpha: widget.isActive ? 0.55 : 0.2),
                 width: 3,
               ),
             ),
           ),
-          if (isActive)
+          if (widget.isActive)
             Container(
               width: 200,
               height: 200,
@@ -742,32 +845,40 @@ class _CaptureStatusRing extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                broadcastActive
-                    ? Icons.sensors
-                    : isRecording
-                    ? Icons.stop_rounded
-                    : Icons.videocam_outlined,
-                size: 48,
-                color: ringColor,
+              FadeTransition(
+                opacity: Tween<double>(begin: 0.35, end: 1).animate(_iconPulse),
+                child: Icon(
+                  widget.broadcastActive
+                      ? Icons.videocam_rounded
+                      : widget.isRecording
+                          ? Icons.videocam_rounded
+                          : Icons.videocam_outlined,
+                  size: 48,
+                  color: iconColor,
+                ),
               ),
               const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
-                  isActive ? 'LIVE' : 'STANDBY',
+                  widget.isActive
+                      ? (widget.elapsedLabel ?? '00:00')
+                      : 'START',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: widget.isActive ? 28 : 22,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 2,
+                    letterSpacing: widget.isActive ? 1 : 2,
+                    fontFeatures: const [FontFeature.tabularFigures()],
                     color: palette.textPrimary,
                   ),
                 ),
               ),
               const SizedBox(height: 6),
               _BroadcastStatusChip(
-                statusText: statusText,
-                isRecording: isRecording,
+                statusText: widget.isActive
+                    ? 'Recording…'
+                    : widget.statusText,
+                isRecording: widget.isActive,
               ),
             ],
           ),
@@ -929,7 +1040,7 @@ class _BroadcastStatusChipState extends State<_BroadcastStatusChip>
       dotColor = Colors.orange;
     } else if (widget.isRecording || widget.statusText == 'Recording...') {
       dotColor = Colors.green;
-    } else if (widget.statusText == 'Select ShieldRec in Broadcast Picker') {
+    } else if (widget.statusText == 'Select SH Rec in Broadcast Picker') {
       dotColor = AppColors.primaryOrange;
     }
 

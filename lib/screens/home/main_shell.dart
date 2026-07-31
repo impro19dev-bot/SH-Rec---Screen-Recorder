@@ -32,8 +32,6 @@ class _MainShellState extends State<MainShell> {
     if (tab == AppTab.clips) {
       _videosKey.currentState?.reloadVideos(requestPermission: true);
     }
-    if (tab == AppTab.home) _homeKey.currentState?.reload();
-    if (tab == AppTab.shield) _shieldKey.currentState?.reload();
   }
 
   @override
@@ -48,7 +46,10 @@ class _MainShellState extends State<MainShell> {
             onGoToClips: () => _selectTab(AppTab.clips),
             onGoToShield: () => _selectTab(AppTab.shield),
           ),
-          RecordScreen(onRecordingSaved: _refreshVideos),
+          RecordScreen(
+            onRecordingSaved: _refreshVideos,
+            isTabActive: _currentTab == AppTab.capture,
+          ),
           VideosScreen(key: _videosKey),
           PrivacyScreen(key: _shieldKey),
           const SettingsScreen(),

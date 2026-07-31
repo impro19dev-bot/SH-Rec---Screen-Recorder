@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/theme_preference_service.dart';
 
 class ThemeController extends ChangeNotifier {
-  AppThemePreference _preference = AppThemePreference.dark;
+  AppThemePreference _preference = AppThemePreference.light;
 
   AppThemePreference get preference => _preference;
   ThemeMode get themeMode => ThemePreferenceService.toThemeMode(_preference);

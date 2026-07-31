@@ -331,7 +331,7 @@ class _PrivacyStudioScreenState extends State<PrivacyStudioScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.privacyNavy,
         foregroundColor: Colors.white,
-        title: const Text('Privacy Studio'),
+        title: const Text('Shield Studio'),
         actions: [
           if (_state != null)
             Padding(

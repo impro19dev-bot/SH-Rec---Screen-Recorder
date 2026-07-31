@@ -1,26 +1,19 @@
-# ReplayKit Broadcast Extension Setup
+# BroadcastUploadExtension setup (SH Rec)
 
-This folder contains a scaffold for an iOS Broadcast Upload Extension.
+## Apple Developer portal
 
-## Important
-The extension target must be added in Xcode (project settings) because `Runner.xcodeproj` still only has the `Runner` target.
+1. Create App ID: `com.azrecorder.screenrecording` (main app).
+2. Create App ID: `com.azrecorder.screenrecording.BroadcastExtension`.
+3. Create App ID: `com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI`.
+4. Create App Group: `group.com.azrecorder.screenrecorder.sharedPreferences`.
+5. Enable **App Groups** on all three App IDs and add the group above.
+6. Select your **Team** in Xcode for Runner + both extension targets.
 
-## Steps (Xcode)
-1. Open `ios/Runner.xcworkspace` in Xcode.
-2. `File` -> `New` -> `Target...` -> choose **Broadcast Upload Extension**.
-3. Name: `BroadcastUploadExtension`.
-4. When prompted, **Activate** the new scheme.
-5. Replace generated `SampleHandler.swift` and `Info.plist` with files from this folder.
-6. Set extension bundle id to: `com.xrecorder.screenVideo.BroadcastExtension`.
-7. In the app target (`Runner`) Signing & Capabilities:
-   - keep `Runner/Runner.entitlements` attached
-   - enable App Groups and add: `group.com.xrecorder.screenvideo.shared`
-8. In extension target Signing & Capabilities:
-   - match team
-   - enable App Groups and add the same: `group.com.xrecorder.screenvideo.shared`
+## Project defaults
 
-## Flutter side
-The Flutter app already exposes an **iOS Broadcast Picker (ReplayKit)** button on Record screen via native channel (`xrecorder/replaykit`).
+- Main bundle ID: `com.azrecorder.screenrecording`
+- Extension bundle ID: `com.azrecorder.screenrecording.BroadcastExtension`
+- Flutter ↔ native channel: `azrecorder/replaykit`
+- ReplayKit picker bundle key: `ReplayKitBroadcastExtensionBundleId` in `Runner/Info.plist`
 
-The app now reads `ReplayKitBroadcastExtensionBundleId` from `Runner/Info.plist` and sets `RPSystemBroadcastPickerView.preferredExtension` automatically.
-Default value is already configured as `com.xrecorder.screenVideo.BroadcastExtension` in `Runner/Info.plist` (`ReplayKitBroadcastExtensionBundleId`).
+> Note: Apple requires extension bundle IDs to be prefixed with the parent app ID.

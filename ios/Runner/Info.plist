@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>ShieldRec - Screen Recorder</string>
+	<string>SH Rec</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>ShieldRec</string>
+	<string>SH Rec</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -25,17 +25,17 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ShieldRec needs Photos access to list your recordings and manage clips for Shield review.</string>
+	<string>SH Rec needs Photos access to show your recordings and let you protect clips before sharing.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>ShieldRec saves screen recordings and safe redacted exports to your Photos library.</string>
+	<string>SH Rec saves screen recordings and safe redacted exports to your Photos library.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>ShieldRec can include microphone audio while recording.</string>
+	<string>SH Rec can include microphone audio while recording.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>ShieldRec does not use your camera. This description is required because media libraries used for screen recording and clip processing reference camera APIs on iOS.</string>
+	<string>SH Rec may access the camera API through media libraries used for screen recording and clip processing. The app does not take photos or open a camera viewfinder.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>ReplayKitBroadcastExtensionBundleId</key>
-	<string>com.xrecorder.screenVideo.BroadcastExtension</string>
+	<string>com.azrecorder.screenrecording.BroadcastExtension</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>photos-redirect</string>

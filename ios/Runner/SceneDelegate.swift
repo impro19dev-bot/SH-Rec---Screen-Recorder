@@ -4,14 +4,14 @@ import ReplayKit
 import Photos
 
 class SceneDelegate: FlutterSceneDelegate {
-  private let replayKitChannelName = "xrecorder/replaykit"
+  private let replayKitChannelName = "azrecorder/replaykit"
   private let replayKitExtensionBundleIdKey = "ReplayKitBroadcastExtensionBundleId"
-  private let appGroupId = "group.com.xrecorder.screenvideo.shared"
+  private let appGroupId = "group.com.azrecorder.screenrecorder.sharedPreferences"
   private let broadcastStatusKey = "replaykit_broadcast_status"
   private let lastSavedPathKey = "replaykit_last_saved_path"
   private let shouldRefreshVideosKey = "replaykit_should_refresh_videos"
   private let lastErrorKey = "replaykit_last_error"
-  private let photosChannelName = "xrecorder/photos"
+  private let photosChannelName = "azrecorder/photos"
   private var replayKitChannel: FlutterMethodChannel?
   private var photosChannel: FlutterMethodChannel?
   private var inAppRecordingActive = false
@@ -248,7 +248,7 @@ class SceneDelegate: FlutterSceneDelegate {
     }
 
     let outputURL = FileManager.default.temporaryDirectory
-      .appendingPathComponent("xrecorder-\(Int(Date().timeIntervalSince1970)).mp4")
+      .appendingPathComponent("shrec-\(Int(Date().timeIntervalSince1970)).mp4")
 
     RPScreenRecorder.shared().stopRecording(withOutput: outputURL) { [weak self] error in
       guard let self else { return }
@@ -289,7 +289,7 @@ class SceneDelegate: FlutterSceneDelegate {
     guard #available(iOS 14.0, *) else {
       completion(
         NSError(
-          domain: "ShieldRec",
+          domain: "SH Rec",
           code: 2,
           userInfo: [NSLocalizedDescriptionKey: "Saving videos requires iOS 14 or later."]
         )
@@ -301,7 +301,7 @@ class SceneDelegate: FlutterSceneDelegate {
       guard status == .authorized || status == .limited else {
         completion(
           NSError(
-            domain: "ShieldRec",
+            domain: "SH Rec",
             code: 1,
             userInfo: [NSLocalizedDescriptionKey: "Photos permission denied."]
           )

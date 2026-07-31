@@ -2,7 +2,7 @@ import AVFoundation
 import ReplayKit
 
 class SampleHandler: RPBroadcastSampleHandler {
-  private let appGroupId = "group.com.xrecorder.screenvideo.shared"
+  private let appGroupId = "group.com.azrecorder.screenrecorder.sharedPreferences"
   private let statusKey = "replaykit_broadcast_status"
   private let lastSavedPathKey = "replaykit_last_saved_path"
   private let shouldRefreshVideosKey = "replaykit_should_refresh_videos"

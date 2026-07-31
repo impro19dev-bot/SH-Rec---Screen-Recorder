@@ -26,7 +26,7 @@ class BroadcastInfo {
 }
 
 class ReplayKitService {
-  static const MethodChannel _channel = MethodChannel('xrecorder/replaykit');
+  static const MethodChannel _channel = MethodChannel('azrecorder/replaykit');
 
   Future<bool> isAvailable() async {
     if (!Platform.isIOS) return false;

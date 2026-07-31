@@ -1,24 +1,27 @@
+# Codemagic iOS release for SH Rec.
+# Wire your App Store Connect integration, profiles, and email before running.
+
 workflows:
   testFlight:
     name: "Ios Release"
     integrations:
-      app_store_connect: NEZHA FAHSI
+      app_store_connect: Aymane Korai
 
     environment:
       flutter: 3.41.0
       ios_signing:
         distribution_type: app_store
-        # Profiles in Codemagic must map to these bundle IDs:
-        #   com.xrecorder.screenVideo
-        #   com.xrecorder.screenVideo.BroadcastExtension
-        #   com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI
-        # App Group on all three: group.com.xrecorder.screenvideo.shared
+        # Profiles for:
+        #   com.azrecorder.screenrecording
+        #   com.azrecorder.screenrecording.BroadcastExtension
+        #   com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI
+        # App Group: group.com.azrecorder.screenrecorder.sharedPreferences
         provisioning_profiles:
-          - provisioning_xrecorder
-          - xrecorder_broadcast_extension
-          - xrecorder_broadcast_setup_ui
+          - provisioning_shrec
+          - provisioning_shrec_broadcast_extension
+          - provisioning_shrec_broadcast_setup_ui
         certificates:
-          - Certificate_nezha
+          - Certificate_Aymane_Korai
 
     scripts:
       - name: Get Flutter packages
@@ -39,7 +42,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - wallora4kWallpaper@outlook.com
+          - impro19dev@gmail.com
         notify:
           success: true
           failure: true

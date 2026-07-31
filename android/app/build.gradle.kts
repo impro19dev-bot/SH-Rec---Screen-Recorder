@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.xrecorder.screenVideo"
+    namespace = "com.azrecorder.screenrecording"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.xrecorder.screenVideo"
+        applicationId = "com.azrecorder.screenrecording"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

@@ -1,7 +1,7 @@
-name: now_recorder
-description: ShieldRec - Privacy-first screen recorder
+name: sh_rec
+description: SH Rec - Privacy-first screen recorder
 publish_to: 'none'
-version: 1.0.6+1
+version: 1.0.0+1
 
 environment:
   sdk: ^3.11.0
@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
   shared_preferences: ^2.5.3
   flutter_screen_recording: ^2.0.18
   photo_manager: ^3.7.1

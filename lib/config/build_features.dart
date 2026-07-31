@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
-
-/// Compile-time flags for developer-only UI (never enabled in App Store release builds).
+/// Compile-time flags for developer-only UI.
 class BuildFeatures {
   BuildFeatures._();
 
-  /// Broadcast audio debug panel and reports — debug builds only for v1.0.
-  static bool get showBroadcastAudioDebugTools => kDebugMode;
+  /// Broadcast audio debug panel — kept off for store builds and normal use.
+  static bool get showBroadcastAudioDebugTools => false;
 }

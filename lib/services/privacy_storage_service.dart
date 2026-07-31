@@ -7,7 +7,7 @@ class PrivacyStorageService {
   PrivacyStorageService._();
   static final PrivacyStorageService instance = PrivacyStorageService._();
 
-  static const _keyPrefix = 'privacy_clip_';
+  static const _keyPrefix = 'shrec_privacy_clip_';
 
   Future<PrivacyVideoState> load(String assetId) async {
     final prefs = await SharedPreferences.getInstance();

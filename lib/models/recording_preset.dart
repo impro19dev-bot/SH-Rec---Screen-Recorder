@@ -22,7 +22,7 @@ extension RecordingPresetDetails on RecordingPreset {
         RecordingPreset.support =>
           'Bug reports — blur emails and account info before sharing',
         RecordingPreset.personal =>
-          'Chats and messages — use Privacy Studio before sharing',
+          'Chats and messages — use Shield Studio before sharing',
       };
 
   IconData get icon => switch (this) {

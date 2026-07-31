@@ -1,6 +1,6 @@
 {
-    "name": "ShieldRec - Screen Recorder",
-    "short_name": "ShieldRec",
+    "name": "SH Rec - Screen Recorder",
+    "short_name": "SH Rec",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

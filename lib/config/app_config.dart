@@ -1,27 +1,31 @@
-/// App-wide identity, links, and store metadata.
+/// App identity and store links.
 abstract final class AppConfig {
-  static const String appDisplayName = 'ShieldRec - Screen Recorder';
-  static const String appName = 'ShieldRec';
-  static const String appTagline = 'Capture screen. Shield what you share.';
+  static const String appDisplayName = 'SH Rec - Screen Recorder';
+  static const String appName = 'SH Rec';
+  static const String splashName = 'SH Rec';
+  static const String splashSubtitle = 'Screen Recorder';
+  static const String appTagline = 'Record. Protect. Share safely.';
 
-  /// App Store subtitle (max 30 characters). Also in docs/app_store_resubmission.md
   static const String appStoreSubtitle = 'Blur & scan before you share';
 
-  static const String packageName = 'com.xrecorder.screenVideo';
+  static const String packageName = 'com.azrecorder.screenrecording';
   static const String broadcastExtensionBundleId =
-      'com.xrecorder.screenVideo.BroadcastExtension';
+      'com.azrecorder.screenrecording.BroadcastExtension';
   static const String broadcastSetupUiBundleId =
-      'com.xrecorder.screenVideo.BroadcastUploadExtensionSetupUI';
-  static const String appGroupId = 'group.com.xrecorder.screenvideo.shared';
+      'com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI';
+  static const String appGroupId = 'group.com.azrecorder.screenrecorder.sharedPreferences';
 
-  /// Update page titles on these sites to match [appDisplayName] before resubmitting.
+  /// Must be publicly readable (no login wall) before App Review.
   static const String privacyPolicyUrl =
-      'https://sites.google.com/view/screen-recorder---xrecorder/home';
+      'https://sites.google.com/view/sh-rec---screen-recorder/home';
 
   static const String supportUrl =
-      'https://sites.google.com/view/xrecorder---screen-recorder/home';
+      'https://sites.google.com/view/sh-rec---screen-recorder1/home';
 
-  /// Set after the app is live on the App Store (numeric ID only).
+  static const String supportEmail = 'impro19dev@gmail.com';
+
+  static String get supportEmailUrl => 'mailto:$supportEmail';
+
   static const String? appStoreId = null;
 
   static bool get showRateApp => appStoreId != null && appStoreId!.isNotEmpty;
@@ -30,5 +34,5 @@ abstract final class AppConfig {
       ? 'https://apps.apple.com/app/id$appStoreId?action=write-review'
       : null;
 
-  static const String appVersion = '1.1.0';
+  static const String appVersion = '1.0.0';
 }

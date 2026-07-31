@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="ShieldRec - Screen Recorder"
+        android:label="SH Rec - Screen Recorder"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

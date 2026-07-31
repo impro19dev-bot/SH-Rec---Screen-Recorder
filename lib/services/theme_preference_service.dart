@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum AppThemePreference { light, dark, system }
 
 abstract final class ThemePreferenceService {
-  static const _key = 'app_theme_mode';
+  static const _key = 'shrec_theme_mode';
 
   static ThemeMode toThemeMode(AppThemePreference preference) {
     return switch (preference) {
@@ -28,7 +28,8 @@ abstract final class ThemePreferenceService {
     return switch (value) {
       'dark' => AppThemePreference.dark,
       'system' => AppThemePreference.system,
-      _ => AppThemePreference.dark,
+      'light' => AppThemePreference.light,
+      _ => AppThemePreference.light,
     };
   }
 

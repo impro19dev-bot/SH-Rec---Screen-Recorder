@@ -50,9 +50,9 @@ const onboardingPages = [
     accentColor: AppColors.splashOrange,
   ),
   OnboardingPageData(
-    title: 'Protect in Privacy Studio',
+    title: 'Protect with Shield Studio',
     description:
-        'Scan for emails and phone numbers, add blur regions, and export a safe copy — all on your device.',
+        'Scan for emails and phone numbers, blur sensitive areas, and export a safe copy — all on your device.',
     features: [
       'Privacy Score scan',
       'Manual blur regions',
