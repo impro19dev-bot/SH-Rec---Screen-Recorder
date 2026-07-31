@@ -1,5 +1,5 @@
 # Codemagic iOS release for SH Rec.
-# Wire your App Store Connect integration, profiles, and email before running.
+# Requires App Store Connect integration + 3 App Store profiles (app + 2 extensions).
 
 workflows:
   testFlight:
@@ -11,11 +11,18 @@ workflows:
       flutter: 3.41.0
       ios_signing:
         distribution_type: app_store
-        # Profiles for:
+        # Fetches App Store profiles for the main app AND matching extensions:
         #   com.azrecorder.screenrecording
-        #   com.azrecorder.screenrec.BroadcastExtension
+        #   com.azrecorder.screenrecording.BroadcastExtension
         #   com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI
-        # App Group: group.com.azrecorder.screenrecorder.sharedPreferences
+        # App Group on all three App IDs:
+        #   group.com.azrecorder.screenrecorder.sharedPreferences
+        #
+        # In Codemagic → Team settings → Code signing identities:
+        # upload/fetch ONE distribution certificate + THREE App Store profiles
+        # (one per bundle ID above), then either reference them by name below
+        # OR rely on bundle_identifier matching.
+        bundle_identifier: com.azrecorder.screenrecording
         provisioning_profiles:
           - provisioning_shrec
           - provisioning_shrec_broadcast_extension
@@ -28,7 +35,18 @@ workflows:
         script: flutter packages pub get
 
       - name: Set up code signing settings on Xcode project
-        script: xcode-project use-profiles
+        script: |
+          xcode-project use-profiles
+          # Fail early if profiles were not applied (Automatic left = CI has no Apple account)
+          if grep -q 'CODE_SIGN_STYLE = Automatic' ios/Runner.xcodeproj/project.pbxproj; then
+            echo "ERROR: use-profiles did not switch targets to Manual signing."
+            echo "Check Codemagic has App Store profiles for:"
+            echo "  com.azrecorder.screenrecording"
+            echo "  com.azrecorder.screenrecording.BroadcastExtension"
+            echo "  com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI"
+            echo "Reference names must match provisioning_profiles in this yaml."
+            exit 1
+          fi
 
       - name: Fix extension entitlements paths after use-profiles
         script: bash ios/scripts/fix_extension_signing_paths.sh ios/Runner.xcodeproj/project.pbxproj
