@@ -19,31 +19,31 @@ text = path.read_text()
 
 replacements = [
     (
-        "com.azrecorder.screenrecording.com.azrecorder.screenrecording.BroadcastExtension",
-        "com.azrecorder.screenrecording.BroadcastExtension",
+        "com.azrecorder.screenrecording.com.azrecorder.screenrec.BroadcastExtension",
+        "com.azrecorder.screenrec.BroadcastExtension",
     ),
     (
         "com.azrecorder.screenrecording.com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI",
         "com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI",
     ),
     (
-        "com.azrecorder.screenrecording.com.azrecorder.screenrecording.BroadcastExtensionSetupUI",
+        "com.azrecorder.screenrecording.com.azrecorder.screenrec.BroadcastExtensionSetupUI",
         "com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI",
     ),
     (
-        "PRODUCT_BUNDLE_IDENTIFIER = com.azrecorder.screenrecording.BroadcastExtensionSetupUI;",
+        "PRODUCT_BUNDLE_IDENTIFIER = com.azrecorder.screenrec.BroadcastExtensionSetupUI;",
         "PRODUCT_BUNDLE_IDENTIFIER = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "com.azrecorder.screenrecording.BroadcastExtension/com.azrecorder.screenrecording.BroadcastExtensionDebug.entitlements",
+        "com.azrecorder.screenrec.BroadcastExtension/com.azrecorder.screenrec.BroadcastExtensionDebug.entitlements",
         "BroadcastUploadExtension/BroadcastUploadExtensionDebug.entitlements",
     ),
     (
-        "com.azrecorder.screenrecording.BroadcastExtension/com.azrecorder.screenrecording.BroadcastExtension.entitlements",
+        "com.azrecorder.screenrec.BroadcastExtension/com.azrecorder.screenrec.BroadcastExtension.entitlements",
         "BroadcastUploadExtension/BroadcastUploadExtension.entitlements",
     ),
     (
-        "com.azrecorder.screenrecording.BroadcastExtensionSetupUI/com.azrecorder.screenrecording.BroadcastExtensionSetupUI.entitlements",
+        "com.azrecorder.screenrec.BroadcastExtensionSetupUI/com.azrecorder.screenrec.BroadcastExtensionSetupUI.entitlements",
         "BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements",
     ),
     (
@@ -51,11 +51,11 @@ replacements = [
         "BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements",
     ),
     (
-        "INFOPLIST_FILE = com.azrecorder.screenrecording.BroadcastExtension/Info.plist",
+        "INFOPLIST_FILE = com.azrecorder.screenrec.BroadcastExtension/Info.plist",
         "INFOPLIST_FILE = BroadcastUploadExtension/Info.plist",
     ),
     (
-        "INFOPLIST_FILE = com.azrecorder.screenrecording.BroadcastExtensionSetupUI/Info.plist",
+        "INFOPLIST_FILE = com.azrecorder.screenrec.BroadcastExtensionSetupUI/Info.plist",
         "INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist",
     ),
     (
@@ -63,11 +63,11 @@ replacements = [
         "INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist",
     ),
     (
-        "path = com.azrecorder.screenrecording.BroadcastExtension;",
+        "path = com.azrecorder.screenrec.BroadcastExtension;",
         "path = BroadcastUploadExtension;",
     ),
     (
-        "path = com.azrecorder.screenrecording.BroadcastExtensionSetupUI;",
+        "path = com.azrecorder.screenrec.BroadcastExtensionSetupUI;",
         "path = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -75,11 +75,11 @@ replacements = [
         "path = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "path = com.azrecorder.screenrecording.BroadcastExtension.appex",
+        "path = com.azrecorder.screenrec.BroadcastExtension.appex",
         "path = BroadcastUploadExtension.appex",
     ),
     (
-        "path = com.azrecorder.screenrecording.BroadcastExtensionSetupUI.appex",
+        "path = com.azrecorder.screenrec.BroadcastExtensionSetupUI.appex",
         "path = BroadcastUploadExtensionSetupUI.appex",
     ),
     (
@@ -87,19 +87,19 @@ replacements = [
         "path = BroadcastUploadExtensionSetupUI.appex",
     ),
     (
-        "name = com.azrecorder.screenrecording.BroadcastExtension;",
+        "name = com.azrecorder.screenrec.BroadcastExtension;",
         "name = BroadcastUploadExtension;",
     ),
     (
-        "productName = com.azrecorder.screenrecording.BroadcastExtension;",
+        "productName = com.azrecorder.screenrec.BroadcastExtension;",
         "productName = BroadcastUploadExtension;",
     ),
     (
-        "remoteInfo = com.azrecorder.screenrecording.BroadcastExtension;",
+        "remoteInfo = com.azrecorder.screenrec.BroadcastExtension;",
         "remoteInfo = BroadcastUploadExtension;",
     ),
     (
-        "name = com.azrecorder.screenrecording.BroadcastExtensionSetupUI;",
+        "name = com.azrecorder.screenrec.BroadcastExtensionSetupUI;",
         "name = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -107,7 +107,7 @@ replacements = [
         "name = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "productName = com.azrecorder.screenrecording.BroadcastExtensionSetupUI;",
+        "productName = com.azrecorder.screenrec.BroadcastExtensionSetupUI;",
         "productName = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -115,7 +115,7 @@ replacements = [
         "productName = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "remoteInfo = com.azrecorder.screenrecording.BroadcastExtensionSetupUI;",
+        "remoteInfo = com.azrecorder.screenrec.BroadcastExtensionSetupUI;",
         "remoteInfo = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -123,11 +123,11 @@ replacements = [
         "remoteInfo = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        'PBXNativeTarget "com.azrecorder.screenrecording.BroadcastExtension"',
+        'PBXNativeTarget "com.azrecorder.screenrec.BroadcastExtension"',
         'PBXNativeTarget "BroadcastUploadExtension"',
     ),
     (
-        'PBXNativeTarget "com.azrecorder.screenrecording.BroadcastExtensionSetupUI"',
+        'PBXNativeTarget "com.azrecorder.screenrec.BroadcastExtensionSetupUI"',
         'PBXNativeTarget "BroadcastUploadExtensionSetupUI"',
     ),
     (
@@ -135,11 +135,11 @@ replacements = [
         'PBXNativeTarget "BroadcastUploadExtensionSetupUI"',
     ),
     (
-        "/* com.azrecorder.screenrecording.BroadcastExtension.appex",
+        "/* com.azrecorder.screenrec.BroadcastExtension.appex",
         "/* BroadcastUploadExtension.appex",
     ),
     (
-        "/* com.azrecorder.screenrecording.BroadcastExtensionSetupUI.appex",
+        "/* com.azrecorder.screenrec.BroadcastExtensionSetupUI.appex",
         "/* BroadcastUploadExtensionSetupUI.appex",
     ),
     (
@@ -147,11 +147,11 @@ replacements = [
         "/* BroadcastUploadExtensionSetupUI.appex",
     ),
     (
-        "/* com.azrecorder.screenrecording.BroadcastExtension */",
+        "/* com.azrecorder.screenrec.BroadcastExtension */",
         "/* BroadcastUploadExtension */",
     ),
     (
-        "/* com.azrecorder.screenrecording.BroadcastExtensionSetupUI */",
+        "/* com.azrecorder.screenrec.BroadcastExtensionSetupUI */",
         "/* BroadcastUploadExtensionSetupUI */",
     ),
     (
@@ -169,7 +169,7 @@ PY
 
 INFO_PLIST="ios/Runner/Info.plist"
 if [[ -f "$INFO_PLIST" ]]; then
-  /usr/libexec/PlistBuddy -c "Set :ReplayKitBroadcastExtensionBundleId com.azrecorder.screenrecording.BroadcastExtension" "$INFO_PLIST" 2>/dev/null \
-    || /usr/libexec/PlistBuddy -c "Add :ReplayKitBroadcastExtensionBundleId string com.azrecorder.screenrecording.BroadcastExtension" "$INFO_PLIST"
+  /usr/libexec/PlistBuddy -c "Set :ReplayKitBroadcastExtensionBundleId com.azrecorder.screenrec.BroadcastExtension" "$INFO_PLIST" 2>/dev/null \
+    || /usr/libexec/PlistBuddy -c "Add :ReplayKitBroadcastExtensionBundleId string com.azrecorder.screenrec.BroadcastExtension" "$INFO_PLIST"
   echo "Set ReplayKitBroadcastExtensionBundleId in $INFO_PLIST"
 fi

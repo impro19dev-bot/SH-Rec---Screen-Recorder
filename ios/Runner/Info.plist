@@ -35,7 +35,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>ReplayKitBroadcastExtensionBundleId</key>
-	<string>com.azrecorder.screenrecording.BroadcastExtension</string>
+	<string>com.azrecorder.screenrec.BroadcastExtension</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>photos-redirect</string>
