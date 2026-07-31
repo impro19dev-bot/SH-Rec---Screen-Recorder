@@ -5,7 +5,7 @@ workflows:
   testFlight:
     name: "Ios Release"
     integrations:
-      app_store_connect: Aymane Korai
+      app_store_connect: Khadija Zeroualy
 
     environment:
       flutter: 3.41.0
