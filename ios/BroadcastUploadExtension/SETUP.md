@@ -4,7 +4,7 @@
 
 1. Create App ID: `com.azrecorder.screenrecording` (main app).
 2. Create App ID: `com.azrecorder.screenrecording.BroadcastPlugun`.
-3. Create App ID: `com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI`.
+3. Create App ID: `com.azrecorder.screenrecording.BroadcastUploadExSetupUI`.
 4. Create App Group: `group.com.azrecorder.screenrecorder.sharedPreferences`.
 5. Enable **App Groups** on all three App IDs and add the group above.
 6. Select your **Team** in Xcode for Runner + both extension targets.

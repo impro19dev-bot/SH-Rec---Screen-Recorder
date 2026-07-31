@@ -6,7 +6,7 @@
 |--------|-----------|
 | App | `com.azrecorder.screenrecording` |
 | Broadcast | `com.azrecorder.screenrecording.BroadcastPlugun` |
-| Setup UI | `com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI` |
+| Setup UI | `com.azrecorder.screenrecording.BroadcastUploadExSetupUI` |
 
 App Group (all three): `group.com.azrecorder.screenrecorder.sharedPreferences`
 

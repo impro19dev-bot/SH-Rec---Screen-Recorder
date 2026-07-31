@@ -14,7 +14,7 @@ workflows:
         # Profiles must match:
         #   com.azrecorder.screenrecording
         #   com.azrecorder.screenrecording.BroadcastPlugun
-        #   com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI
+        #   com.azrecorder.screenrecording.BroadcastUploadExSetupUI
         # App Group: group.com.azrecorder.screenrecorder.sharedPreferences
         provisioning_profiles:
           - provisioning_shrec
@@ -36,7 +36,7 @@ workflows:
             echo "Check Codemagic has App Store profiles for:"
             echo "  com.azrecorder.screenrecording"
             echo "  com.azrecorder.screenrecording.BroadcastPlugun"
-            echo "  com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI"
+            echo "  com.azrecorder.screenrecording.BroadcastUploadExSetupUI"
             echo "Reference names must match provisioning_profiles in this yaml."
             exit 1
           fi
