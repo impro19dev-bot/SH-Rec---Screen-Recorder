@@ -10,19 +10,12 @@ workflows:
     environment:
       flutter: 3.41.0
       ios_signing:
-        distribution_type: app_store
-        # Fetches App Store profiles for the main app AND matching extensions:
+        # Named profiles only (do not mix with distribution_type + bundle_identifier).
+        # Profiles must match:
         #   com.azrecorder.screenrecording
         #   com.azrecorder.screenrec.BroadcastExtension
         #   com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI
-        # App Group on all three App IDs:
-        #   group.com.azrecorder.screenrecorder.sharedPreferences
-        #
-        # In Codemagic → Team settings → Code signing identities:
-        # upload/fetch ONE distribution certificate + THREE App Store profiles
-        # (one per bundle ID above), then either reference them by name below
-        # OR rely on bundle_identifier matching.
-        bundle_identifier: com.azrecorder.screenrecording
+        # App Group: group.com.azrecorder.screenrecorder.sharedPreferences
         provisioning_profiles:
           - provisioning_shrec
           - provisioning_shrec_broadcast_extension
