@@ -12,7 +12,7 @@ abstract final class AppConfig {
   static const String broadcastExtensionBundleId =
       'com.azrecorder.screenrec.BroadcastExtension';
   static const String broadcastSetupUiBundleId =
-      'com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI';
+      'com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI';
   static const String appGroupId =
       'group.com.azrecorder.screenrecorder.sharedPreferences';
 

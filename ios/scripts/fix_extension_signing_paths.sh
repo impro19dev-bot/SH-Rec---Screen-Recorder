@@ -23,16 +23,16 @@ replacements = [
         "com.azrecorder.screenrec.BroadcastExtension",
     ),
     (
-        "com.azrecorder.screenrecording.com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI",
-        "com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI",
+        "com.azrecorder.screenrecording.com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI",
+        "com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI",
     ),
     (
         "com.azrecorder.screenrecording.com.azrecorder.screenrec.BroadcastExtensionSetupUI",
-        "com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI",
+        "com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI",
     ),
     (
         "PRODUCT_BUNDLE_IDENTIFIER = com.azrecorder.screenrec.BroadcastExtensionSetupUI;",
-        "PRODUCT_BUNDLE_IDENTIFIER = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI;",
+        "PRODUCT_BUNDLE_IDENTIFIER = com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI;",
     ),
     (
         "com.azrecorder.screenrec.BroadcastExtension/com.azrecorder.screenrec.BroadcastExtensionDebug.entitlements",
@@ -47,7 +47,7 @@ replacements = [
         "BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements",
     ),
     (
-        "com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI/com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI.entitlements",
+        "com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI/com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI.entitlements",
         "BroadcastUploadExtensionSetupUI/BroadcastUploadExtensionSetupUI.entitlements",
     ),
     (
@@ -59,7 +59,7 @@ replacements = [
         "INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist",
     ),
     (
-        "INFOPLIST_FILE = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI/Info.plist",
+        "INFOPLIST_FILE = com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI/Info.plist",
         "INFOPLIST_FILE = BroadcastUploadExtensionSetupUI/Info.plist",
     ),
     (
@@ -71,7 +71,7 @@ replacements = [
         "path = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "path = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI;",
+        "path = com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI;",
         "path = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -83,7 +83,7 @@ replacements = [
         "path = BroadcastUploadExtensionSetupUI.appex",
     ),
     (
-        "path = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI.appex",
+        "path = com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI.appex",
         "path = BroadcastUploadExtensionSetupUI.appex",
     ),
     (
@@ -103,7 +103,7 @@ replacements = [
         "name = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "name = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI;",
+        "name = com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI;",
         "name = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -111,7 +111,7 @@ replacements = [
         "productName = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "productName = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI;",
+        "productName = com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI;",
         "productName = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -119,7 +119,7 @@ replacements = [
         "remoteInfo = BroadcastUploadExtensionSetupUI;",
     ),
     (
-        "remoteInfo = com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI;",
+        "remoteInfo = com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI;",
         "remoteInfo = BroadcastUploadExtensionSetupUI;",
     ),
     (
@@ -131,7 +131,7 @@ replacements = [
         'PBXNativeTarget "BroadcastUploadExtensionSetupUI"',
     ),
     (
-        'PBXNativeTarget "com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI"',
+        'PBXNativeTarget "com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI"',
         'PBXNativeTarget "BroadcastUploadExtensionSetupUI"',
     ),
     (
@@ -143,7 +143,7 @@ replacements = [
         "/* BroadcastUploadExtensionSetupUI.appex",
     ),
     (
-        "/* com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI.appex",
+        "/* com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI.appex",
         "/* BroadcastUploadExtensionSetupUI.appex",
     ),
     (
@@ -155,7 +155,7 @@ replacements = [
         "/* BroadcastUploadExtensionSetupUI */",
     ),
     (
-        "/* com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI */",
+        "/* com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI */",
         "/* BroadcastUploadExtensionSetupUI */",
     ),
 ]
