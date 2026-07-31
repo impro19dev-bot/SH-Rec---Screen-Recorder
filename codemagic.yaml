@@ -13,7 +13,7 @@ workflows:
         distribution_type: app_store
         # Profiles for:
         #   com.azrecorder.screenrecording
-        #   com.azrecorder.screenrecording.BroadcastExtension
+        #   com.azrecorder.screenrec.BroadcastExtension
         #   com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI
         # App Group: group.com.azrecorder.screenrecorder.sharedPreferences
         provisioning_profiles:

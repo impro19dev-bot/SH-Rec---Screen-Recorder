@@ -10,10 +10,11 @@ abstract final class AppConfig {
 
   static const String packageName = 'com.azrecorder.screenrecording';
   static const String broadcastExtensionBundleId =
-      'com.azrecorder.screenrecording.BroadcastExtension';
+      'com.azrecorder.screenrec.BroadcastExtension';
   static const String broadcastSetupUiBundleId =
       'com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI';
-  static const String appGroupId = 'group.com.azrecorder.screenrecorder.sharedPreferences';
+  static const String appGroupId =
+      'group.com.azrecorder.screenrecorder.sharedPreferences';
 
   /// Must be publicly readable (no login wall) before App Review.
   static const String privacyPolicyUrl =

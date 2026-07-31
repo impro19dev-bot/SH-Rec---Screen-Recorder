@@ -5,7 +5,7 @@
 | Target | Bundle ID |
 |--------|-----------|
 | App | `com.azrecorder.screenrecording` |
-| Broadcast | `com.azrecorder.screenrecording.BroadcastExtension` |
+| Broadcast | `com.azrecorder.screenrec.BroadcastExtension` |
 | Setup UI | `com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI` |
 
 App Group (all three): `group.com.azrecorder.screenrecorder.sharedPreferences`
