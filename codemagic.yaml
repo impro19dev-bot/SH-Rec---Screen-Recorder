@@ -11,17 +11,12 @@ workflows:
       flutter: 3.41.0
       ios_signing:
         distribution_type: app_store
-        # Fetches App Store profiles for the main app AND matching extensions:
+        # Profiles required for (App Store, App Groups enabled):
         #   com.azrecorder.screenrecording
         #   com.azrecorder.screenrecording.BroadcastExtension
         #   com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI
-        # App Group on all three App IDs:
-        #   group.com.azrecorder.screenrecorder.sharedPreferences
-        #
-        # In Codemagic → Team settings → Code signing identities:
-        # upload/fetch ONE distribution certificate + THREE App Store profiles
-        # (one per bundle ID above), then either reference them by name below
-        # OR rely on bundle_identifier matching.
+        # App Group: group.com.azrecorder.screenrecorder.sharedPreferences
+        # Team: 286Q8795HU
         bundle_identifier: com.azrecorder.screenrecording
         provisioning_profiles:
           - provisioning_shrec
@@ -37,14 +32,12 @@ workflows:
       - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
-          # Fail early if profiles were not applied (Automatic left = CI has no Apple account)
           if grep -q 'CODE_SIGN_STYLE = Automatic' ios/Runner.xcodeproj/project.pbxproj; then
             echo "ERROR: use-profiles did not switch targets to Manual signing."
             echo "Check Codemagic has App Store profiles for:"
             echo "  com.azrecorder.screenrecording"
             echo "  com.azrecorder.screenrecording.BroadcastExtension"
             echo "  com.azrecorder.screenrecording.BroadcastUploadExtensionSetupUI"
-            echo "Reference names must match provisioning_profiles in this yaml."
             exit 1
           fi
 
