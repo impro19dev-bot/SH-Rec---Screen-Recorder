@@ -13,7 +13,7 @@ workflows:
         # Named profiles only (do not mix with distribution_type + bundle_identifier).
         # Profiles must match:
         #   com.azrecorder.screenrecording
-        #   com.azrecorder.screenrec.BroadcastExtension
+        #   com.azrecorder.screenrecording.BroadcastPlugun
         #   com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI
         # App Group: group.com.azrecorder.screenrecorder.sharedPreferences
         provisioning_profiles:
@@ -35,7 +35,7 @@ workflows:
             echo "ERROR: use-profiles did not switch targets to Manual signing."
             echo "Check Codemagic has App Store profiles for:"
             echo "  com.azrecorder.screenrecording"
-            echo "  com.azrecorder.screenrec.BroadcastExtension"
+            echo "  com.azrecorder.screenrecording.BroadcastPlugun"
             echo "  com.azrecorder.screenrecordingg.BroadcastUploadExtensionSetupUI"
             echo "Reference names must match provisioning_profiles in this yaml."
             exit 1
