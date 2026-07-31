@@ -21,7 +21,7 @@ workflows:
           - provisioning_shrec_broadcast_extension
           - provisioning_shrec_broadcast_setup_ui
         certificates:
-          - Certificate_Aymane_Korai
+          - Certificate_aymane
 
     scripts:
       - name: Get Flutter packages
