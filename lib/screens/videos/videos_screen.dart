@@ -2,13 +2,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:share_plus/share_plus.dart';
-
 import '../../models/privacy_video_state.dart';
 import '../../services/photos_launcher_service.dart';
 import '../../services/privacy_share_guard.dart';
 import '../../services/privacy_storage_service.dart';
 import '../../services/video_library_service.dart';
+import '../../services/video_share_service.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_design.dart';
 import '../../theme/context_extensions.dart';
@@ -194,17 +193,14 @@ class VideosScreenState extends State<VideosScreen> {
     if (!await PrivacyShareGuard.confirmBeforeShare(context, video: video)) {
       return;
     }
-    final file = await video.file;
     if (!mounted) return;
-    if (file == null) {
+    final shared = await VideoShareService.instance.shareAsset(context, video);
+    if (!mounted) return;
+    if (!shared) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not read video file for sharing.')),
+        const SnackBar(content: Text('Could not open the share sheet.')),
       );
-      return;
     }
-    await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], text: 'SH Rec video'),
-    );
   }
 
   Future<bool> _confirmDelete(AssetEntity video) async {

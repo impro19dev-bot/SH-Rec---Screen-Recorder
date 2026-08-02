@@ -2,12 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:share_plus/share_plus.dart';
-
 import '../../models/video_info_details.dart';
 import '../../services/photos_launcher_service.dart';
 import '../../services/privacy_share_guard.dart';
 import '../../services/video_info_service.dart';
+import '../../services/video_share_service.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/context_extensions.dart';
 import '../videos/video_player_screen.dart';
@@ -72,15 +71,13 @@ class _VideoInfoDetailScreenState extends State<VideoInfoDetailScreen> {
     if (!await PrivacyShareGuard.confirmBeforeShare(context, video: widget.video)) {
       return;
     }
-    final file = await widget.video.file;
     if (!mounted) return;
-    if (file == null) {
-      _showSnack('Could not read video file for sharing.');
-      return;
+    final shared =
+        await VideoShareService.instance.shareAsset(context, widget.video);
+    if (!mounted) return;
+    if (!shared) {
+      _showSnack('Could not open the share sheet.');
     }
-    await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], text: 'SH Rec video'),
-    );
   }
 
   Future<void> _openInPhotos() async {

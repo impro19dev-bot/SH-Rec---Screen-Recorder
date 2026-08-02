@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../models/privacy_scan_result.dart';
+import '../models/privacy_video_state.dart';
+import '../screens/privacy/privacy_studio_screen.dart';
 import '../services/privacy_scan_service.dart';
 import '../services/privacy_storage_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/privacy_status_badge.dart';
-import '../models/privacy_video_state.dart';
-import '../screens/privacy/privacy_studio_screen.dart';
 
 /// Prompts users to review recordings for sensitive content before sharing.
 abstract final class PrivacyShareGuard {
@@ -20,7 +20,10 @@ abstract final class PrivacyShareGuard {
     'Notifications and personal images',
   ];
 
-  /// Returns `true` when the user confirms they want to share.
+  /// Returns `true` when the user confirms they want to share (Share anyway).
+  ///
+  /// Privacy score never blocks this path — the sheet always proceeds when
+  /// the user taps Share anyway.
   static Future<bool> confirmBeforeShare(
     BuildContext context, {
     AssetEntity? video,
@@ -29,21 +32,25 @@ abstract final class PrivacyShareGuard {
     PrivacyVideoState? savedState;
 
     if (video != null) {
-      savedState = await PrivacyStorageService.instance.load(video.id);
-      if (savedState.lastScanScore != null) {
-        scanResult = PrivacyScanResult(
-          score: savedState.lastScanScore!,
-          findings: savedState.lastScanFindings,
-        );
-      } else {
-        scanResult = await PrivacyScanService.instance.scanVideo(video);
-        await PrivacyStorageService.instance.save(
-          savedState.copyWith(
-            status: PrivacyClipStatus.scanned,
-            lastScanScore: scanResult.score,
-            lastScanFindings: scanResult.findings,
-          ),
-        );
+      try {
+        savedState = await PrivacyStorageService.instance.load(video.id);
+        if (savedState.lastScanScore != null) {
+          scanResult = PrivacyScanResult(
+            score: savedState.lastScanScore!,
+            findings: savedState.lastScanFindings,
+          );
+        } else {
+          scanResult = await PrivacyScanService.instance.scanVideo(video);
+          await PrivacyStorageService.instance.save(
+            savedState.copyWith(
+              status: PrivacyClipStatus.scanned,
+              lastScanScore: scanResult.score,
+              lastScanFindings: scanResult.findings,
+            ),
+          );
+        }
+      } catch (_) {
+        // Scan is advisory only — still show the dialog so Share anyway works.
       }
     }
 
@@ -51,7 +58,7 @@ abstract final class PrivacyShareGuard {
 
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Row(
           children: [
             Icon(Icons.shield_outlined, color: AppColors.privacyTeal),
@@ -115,8 +122,8 @@ abstract final class PrivacyShareGuard {
                   ),
                 ),
               if (savedState?.hasSafeExport == true)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                const Padding(
+                  padding: EdgeInsets.only(top: 8),
                   child: Text(
                     'Tip: Share your safe export from Shield Studio for best protection.',
                     style: TextStyle(
@@ -132,7 +139,7 @@ abstract final class PrivacyShareGuard {
           if (video != null)
             TextButton(
               onPressed: () {
-                Navigator.pop(context, false);
+                Navigator.pop(dialogContext, false);
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (_) => PrivacyStudioScreen(video: video),
@@ -142,11 +149,11 @@ abstract final class PrivacyShareGuard {
               child: const Text('Protect'),
             ),
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
+            onPressed: () => Navigator.pop(dialogContext, false),
             child: const Text('Cancel'),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => Navigator.pop(dialogContext, true),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primaryOrange,
             ),

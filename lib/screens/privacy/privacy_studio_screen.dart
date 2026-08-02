@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
@@ -11,8 +10,10 @@ import '../../models/blur_region.dart';
 import '../../models/privacy_scan_result.dart';
 import '../../models/privacy_video_state.dart';
 import '../../services/privacy_scan_service.dart';
+import '../../services/privacy_share_guard.dart';
 import '../../services/privacy_storage_service.dart';
 import '../../services/safe_export_service.dart';
+import '../../services/video_share_service.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/blur_region_overlay.dart';
 import '../../widgets/privacy_status_badge.dart';
@@ -217,14 +218,31 @@ class _PrivacyStudioScreenState extends State<PrivacyStudioScreen> {
   }
 
   Future<void> _shareSafeCopy() async {
-    final file = _lastSafeExport;
-    if (file == null || !file.existsSync()) {
-      _showSnack('Export a safe copy first.');
+    final safeFile = _lastSafeExport;
+    if (safeFile != null && safeFile.existsSync()) {
+      final shared = await VideoShareService.instance.shareFile(
+        context,
+        safeFile,
+      );
+      if (!mounted) return;
+      if (!shared) _showSnack('Could not open the share sheet.');
       return;
     }
-    await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], text: 'Safe recording'),
+
+    // No safe export yet — same as Share anyway: open the sheet for the original.
+    if (!await PrivacyShareGuard.confirmBeforeShare(
+      context,
+      video: widget.video,
+    )) {
+      return;
+    }
+    if (!mounted) return;
+    final shared = await VideoShareService.instance.shareAsset(
+      context,
+      widget.video,
     );
+    if (!mounted) return;
+    if (!shared) _showSnack('Could not open the share sheet.');
   }
 
   void _showSnack(String message) {
@@ -483,7 +501,7 @@ class _StudioToolbar extends StatelessWidget {
               ),
               _ToolChip(
                 icon: Icons.ios_share,
-                label: 'Share safe',
+                label: 'Share',
                 onTap: busy ? null : onShare,
               ),
             ],
