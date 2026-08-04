@@ -12,14 +12,14 @@ class BroadcastSetupViewController: UIViewController {
     view.backgroundColor = UIColor(red: 0.973, green: 0.976, blue: 0.980, alpha: 1.0)
 
     let titleLabel = UILabel()
-    titleLabel.text = "SH Rec"
+    titleLabel.text = "SH Shield"
     titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
     titleLabel.textAlignment = .center
     titleLabel.textColor = UIColor(red: 0.102, green: 0.102, blue: 0.102, alpha: 1.0)
 
     let messageLabel = UILabel()
     messageLabel.text =
-      "Tap Start Broadcast to begin full-screen recording with SH Rec."
+      "Tap Start Broadcast to begin full-screen recording with SH Shield."
     messageLabel.font = .systemFont(ofSize: 16, weight: .regular)
     messageLabel.textAlignment = .center
     messageLabel.numberOfLines = 0
@@ -71,7 +71,7 @@ class BroadcastSetupViewController: UIViewController {
   private func userDidFinishSetup() {
     let broadcastURL = URL(string: "https://shrec.local/broadcast")!
     let setupInfo: [String: NSCoding & NSObjectProtocol] = [
-      "broadcastName": "SH Rec" as NSString,
+      "broadcastName": "SH Shield" as NSString,
     ]
     extensionContext?.completeRequest(withBroadcast: broadcastURL, setupInfo: setupInfo)
   }

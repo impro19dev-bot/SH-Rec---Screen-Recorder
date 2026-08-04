@@ -1,4 +1,4 @@
-# SH Rec — App Store submission
+# SH Shield — App Store submission
 
 ## Bundle IDs
 
@@ -14,28 +14,32 @@ Set your Development Team in Xcode before archiving.
 
 ---
 
-## Listing
+## Listing (privacy-first positioning)
 
-**Name:** SH Rec - Screen Recorder  
-**Subtitle:** Blur & scan before you share  
+**Name:** SH Shield  
+**Subtitle:** Hide emails & info before sharing  
 
 **Promotional text:**
 ```
-Record your screen, scan for emails and phones, blur sensitive spots, and export a safe copy on your iPhone. No account. No cloud. No ads.
+Scan screen clips for emails and phone numbers, blur sensitive spots, and share a safer copy — on your iPhone. Capture is optional. No account. No cloud. No ads.
 ```
 
 **Description:**
 ```
-SH Rec is a screen recorder with a built-in privacy workflow. Capture your screen, then use Shield Studio to review and redact sensitive information before you share — all on your device.
+SH Shield helps you hide sensitive information in screen clips before you share — emails, phone numbers, and personal UI. Capture is optional; the core product is on-device review and redaction.
 
-FEATURES
-• Full-device recording with Apple’s broadcast picker
-• Optional microphone audio
-• Shield Studio — on-device OCR for emails and phone numbers
+WHAT MAKES SH SHIELD DIFFERENT
+• Protect / Hide Info workspace for any Photos video
+• On-device OCR scan for emails and phone numbers
 • Privacy Score before you share
+• Tap a finding to place blur and jump to that moment
 • Manual blur regions and safe export to Photos
-• Safe Share confirmation
-• Clips library with search and sort
+• Share-protected confirmation flow
+• Needs-review queue so unprotected clips are obvious
+
+OPTIONAL CAPTURE
+• Create a new clip with Apple’s broadcast picker when you need one
+• Then hide sensitive info before sharing
 
 PRIVATE BY DESIGN
 • No account
@@ -43,28 +47,29 @@ PRIVATE BY DESIGN
 • No ads
 • Processing stays on your iPhone
 
-Note: Screen recording requires a physical iPhone.
+Note: Full-device capture requires a physical iPhone.
 ```
 
 **Keywords:**
 ```
-screen record,privacy,redact,OCR,tutorial,video,capture,export,blur,mic
+redact,privacy,blur,hide info,OCR,safe share,screen clip,protect,email,phone
 ```
 
 ---
 
-## Review notes
+## Review notes (4.3 differentiation)
 
 ```
-SH Rec includes Shield Studio for on-device privacy review before sharing.
+PRIMARY PURPOSE: On-device privacy / redact-before-share utility.
+Screen capture is an optional way to create a clip to protect — not the main product.
 
-Test path:
-1. Complete onboarding.
-2. Allow Photos on Home if asked.
-3. Capture → Start Recording → Apple broadcast picker (device required).
-4. Clips → open a recording → Shield Studio → Scan → blur → Safe Export → Safe Share.
+Unique flow for App Review:
+1. Open SH Shield → Home shows Needs Review / Hide info (not a giant record button).
+2. Protect → “Protect a clip from Photos” (or capture optionally).
+3. Hide Info → Scan → tap a finding to place blur → Safe export → Share protected.
+4. Library shows privacy status (Needs review / Info hidden / Safe to share).
 
-No tracking. App Privacy: Data Not Collected. No ATT prompt.
+No login. No tracking. App Privacy: Data Not Collected.
 ```
 
 ---
@@ -76,8 +81,7 @@ No tracking. App Privacy: Data Not Collected. No ATT prompt.
   - Support: `https://sites.google.com/view/sh-rec---screen-recorder1/home`
   - Email: `impro19dev@gmail.com`
 - [ ] App Privacy in ASC: Data Not Collected / Tracking = No
-- [ ] App IDs + App Group registered
-- [ ] Xcode Team selected for Runner + extensions
-- [ ] Physical iPhone test of record → Shield → export
-- [ ] Screenshots lead with Shield Studio, not only the record button
-- [ ] Build: `1.0.0+1` (bump `pubspec.yaml` for each upload)
+- [ ] Screenshots lead with Hide Info / Privacy Score / blur — not Capture
+- [ ] Name = SH Shield; subtitle emphasizes hide/redact, not “Screen Recorder”
+- [ ] Physical iPhone test: import clip → scan → blur → export → share
+- [ ] Bump `pubspec.yaml` version for each upload

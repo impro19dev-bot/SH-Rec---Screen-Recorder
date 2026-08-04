@@ -18,19 +18,23 @@ class _MainShellState extends State<MainShell> {
   AppTab _currentTab = AppTab.home;
   final GlobalKey<VideosScreenState> _videosKey = GlobalKey<VideosScreenState>();
   final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
-  final GlobalKey<PrivacyScreenState> _shieldKey = GlobalKey<PrivacyScreenState>();
+  final GlobalKey<PrivacyScreenState> _protectKey =
+      GlobalKey<PrivacyScreenState>();
 
   void _refreshVideos() {
     _videosKey.currentState?.reloadVideos();
     _homeKey.currentState?.reload();
-    _shieldKey.currentState?.reload();
+    _protectKey.currentState?.reload();
   }
 
   void _selectTab(AppTab tab) {
     if (tab == _currentTab) return;
     setState(() => _currentTab = tab);
-    if (tab == AppTab.clips) {
+    if (tab == AppTab.library) {
       _videosKey.currentState?.reloadVideos(requestPermission: true);
+    }
+    if (tab == AppTab.protect) {
+      _protectKey.currentState?.reload();
     }
   }
 
@@ -43,15 +47,15 @@ class _MainShellState extends State<MainShell> {
           HomeScreen(
             key: _homeKey,
             onGoToCapture: () => _selectTab(AppTab.capture),
-            onGoToClips: () => _selectTab(AppTab.clips),
-            onGoToShield: () => _selectTab(AppTab.shield),
+            onGoToLibrary: () => _selectTab(AppTab.library),
+            onGoToProtect: () => _selectTab(AppTab.protect),
           ),
+          VideosScreen(key: _videosKey),
+          PrivacyScreen(key: _protectKey),
           RecordScreen(
             onRecordingSaved: _refreshVideos,
             isTabActive: _currentTab == AppTab.capture,
           ),
-          VideosScreen(key: _videosKey),
-          PrivacyScreen(key: _shieldKey),
           const SettingsScreen(),
         ],
       ),

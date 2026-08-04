@@ -41,7 +41,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
   bool _broadcastActive = false;
   bool _replayKitAvailable = false;
   bool _isSimulator = false;
-  String _statusText = 'Ready to record';
+  String _statusText = 'Ready to capture a clip';
   Timer? _broadcastStatusTimer;
   Timer? _elapsedTimer;
   Duration _elapsed = Duration.zero;
@@ -257,7 +257,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           isRecording = true;
           text = 'Recording in-app only…';
         } else if (!broadcastActive) {
-          text = 'Ready to record';
+          text = 'Ready to capture a clip';
         }
     }
 
@@ -389,7 +389,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           'iOS will ask you to confirm screen broadcast.\n\n'
           '1. Tap Continue to open Apple’s broadcast menu.\n'
           '2. Turn Microphone ON (required for audio).\n'
-          '3. Select SH Rec in the list.\n'
+          '3. Select SH Shield in the list.\n'
           '4. Tap Start Broadcast.\n'
           '5. Stop from the red status bar or Control Center.',
         ),
@@ -461,7 +461,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
           setState(() {
             _appOnlyRecording = false;
             _isRecording = false;
-            _statusText = 'Ready to record';
+            _statusText = 'Ready to capture a clip';
           });
           _publishGlobalRecordingStatus();
           ScaffoldMessenger.of(context).showSnackBar(
@@ -498,11 +498,11 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
       } else {
         setState(() {
           _isRecording = false;
-          _statusText = 'Ready to record';
+          _statusText = 'Ready to capture a clip';
         });
         _publishGlobalRecordingStatus();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.error ?? 'Failed to stop recording.')),
+          SnackBar(content: Text(result.error ?? 'Failed to stop capture.')),
         );
       }
       return;
@@ -583,7 +583,7 @@ class _RecordScreenState extends State<RecordScreen> with WidgetsBindingObserver
       children: [
         VaultScreenHeader(
           title: 'Capture',
-          subtitle: _preset.hint,
+          subtitle: 'Optional — create a clip to protect',
           trailing: [
             VaultIconAction(
               icon: Icons.palette_outlined,
@@ -863,7 +863,7 @@ class _CaptureStatusRingState extends State<_CaptureStatusRing>
                 child: Text(
                   widget.isActive
                       ? (widget.elapsedLabel ?? '00:00')
-                      : 'START',
+                      : 'CAPTURE',
                   style: TextStyle(
                     fontSize: widget.isActive ? 28 : 22,
                     fontWeight: FontWeight.w900,
@@ -1040,7 +1040,7 @@ class _BroadcastStatusChipState extends State<_BroadcastStatusChip>
       dotColor = Colors.orange;
     } else if (widget.isRecording || widget.statusText == 'Recording...') {
       dotColor = Colors.green;
-    } else if (widget.statusText == 'Select SH Rec in Broadcast Picker') {
+    } else if (widget.statusText == 'Select SH Shield in Broadcast Picker') {
       dotColor = AppColors.primaryOrange;
     }
 

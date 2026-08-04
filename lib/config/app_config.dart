@@ -1,12 +1,12 @@
 /// App identity and store links.
 abstract final class AppConfig {
-  static const String appDisplayName = 'SH Rec - Screen Recorder';
-  static const String appName = 'SH Rec';
-  static const String splashName = 'SH Rec';
-  static const String splashSubtitle = 'Screen Recorder';
-  static const String appTagline = 'Record. Protect. Share safely.';
+  static const String appDisplayName = 'SH Shield';
+  static const String appName = 'SH Shield';
+  static const String splashName = 'SH Shield';
+  static const String splashSubtitle = 'Hide info before you share';
+  static const String appTagline = 'Scan. Hide. Share safely.';
 
-  static const String appStoreSubtitle = 'Blur & scan before you share';
+  static const String appStoreSubtitle = 'Hide emails & info before sharing';
 
   static const String packageName = 'com.azrecorder.screenrecording';
   static const String broadcastExtensionBundleId =
@@ -35,5 +35,5 @@ abstract final class AppConfig {
       ? 'https://apps.apple.com/app/id$appStoreId?action=write-review'
       : null;
 
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '1.1.0';
 }

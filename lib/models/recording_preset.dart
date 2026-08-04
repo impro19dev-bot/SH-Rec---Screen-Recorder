@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
 
 enum RecordingPreset {
-  standard,
-  tutorial,
   support,
+  tutorial,
   personal,
+  standard,
 }
 
 extension RecordingPresetDetails on RecordingPreset {
   String get label => switch (this) {
-        RecordingPreset.standard => 'Standard',
-        RecordingPreset.tutorial => 'Tutorial',
         RecordingPreset.support => 'Support',
-        RecordingPreset.personal => 'Personal',
+        RecordingPreset.tutorial => 'Tutorial',
+        RecordingPreset.personal => 'Chats',
+        RecordingPreset.standard => 'General',
       };
 
   String get hint => switch (this) {
-        RecordingPreset.standard => 'Record normally, protect before sharing',
-        RecordingPreset.tutorial =>
-          'Great for guides — scan for notifications after recording',
         RecordingPreset.support =>
-          'Bug reports — blur emails and account info before sharing',
+          'Bug reports — hide emails and account info before sharing',
+        RecordingPreset.tutorial =>
+          'Guides — scan for notifications after capture',
         RecordingPreset.personal =>
-          'Chats and messages — use Shield Studio before sharing',
+          'Messages — blur names and numbers in Shield Studio',
+        RecordingPreset.standard =>
+          'Capture a clip, then hide sensitive info before sharing',
       };
 
   IconData get icon => switch (this) {
-        RecordingPreset.standard => Icons.videocam_outlined,
-        RecordingPreset.tutorial => Icons.school_outlined,
         RecordingPreset.support => Icons.support_agent_outlined,
+        RecordingPreset.tutorial => Icons.school_outlined,
         RecordingPreset.personal => Icons.lock_person_outlined,
+        RecordingPreset.standard => Icons.visibility_off_outlined,
       };
 }

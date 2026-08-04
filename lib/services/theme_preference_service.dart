@@ -29,7 +29,7 @@ abstract final class ThemePreferenceService {
       'dark' => AppThemePreference.dark,
       'system' => AppThemePreference.system,
       'light' => AppThemePreference.light,
-      _ => AppThemePreference.light,
+      _ => AppThemePreference.dark,
     };
   }
 

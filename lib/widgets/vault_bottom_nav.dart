@@ -4,7 +4,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_design.dart';
 import '../theme/context_extensions.dart';
 
-enum AppTab { home, capture, clips, shield, menu }
+enum AppTab { home, library, protect, capture, menu }
 
 class VaultBottomNav extends StatelessWidget {
   const VaultBottomNav({
@@ -40,30 +40,30 @@ class VaultBottomNav extends StatelessWidget {
         child: Row(
           children: [
             _Slot(
-              icon: Icons.grid_view_rounded,
+              icon: Icons.home_outlined,
               label: 'Home',
               active: currentTab == AppTab.home,
               onTap: () => onTabSelected(AppTab.home),
             ),
             _Slot(
-              icon: Icons.photo_library_outlined,
-              label: 'Clips',
-              active: currentTab == AppTab.clips,
-              onTap: () => onTabSelected(AppTab.clips),
+              icon: Icons.folder_outlined,
+              label: 'Library',
+              active: currentTab == AppTab.library,
+              onTap: () => onTabSelected(AppTab.library),
             ),
             Expanded(
               child: Center(
-                child: _CaptureFab(
-                  active: currentTab == AppTab.capture,
-                  onTap: () => onTabSelected(AppTab.capture),
+                child: _ProtectFab(
+                  active: currentTab == AppTab.protect,
+                  onTap: () => onTabSelected(AppTab.protect),
                 ),
               ),
             ),
             _Slot(
-              icon: Icons.enhanced_encryption_outlined,
-              label: 'Shield',
-              active: currentTab == AppTab.shield,
-              onTap: () => onTabSelected(AppTab.shield),
+              icon: Icons.videocam_outlined,
+              label: 'Capture',
+              active: currentTab == AppTab.capture,
+              onTap: () => onTabSelected(AppTab.capture),
             ),
             _Slot(
               icon: Icons.tune_rounded,
@@ -120,8 +120,8 @@ class _Slot extends StatelessWidget {
   }
 }
 
-class _CaptureFab extends StatelessWidget {
-  const _CaptureFab({required this.active, required this.onTap});
+class _ProtectFab extends StatelessWidget {
+  const _ProtectFab({required this.active, required this.onTap});
 
   final bool active;
   final VoidCallback onTap;
@@ -142,9 +142,9 @@ class _CaptureFab extends StatelessWidget {
             width: AppDesign.fabSize,
             height: AppDesign.fabSize,
             child: Icon(
-              active ? Icons.videocam : Icons.fiber_manual_record,
+              active ? Icons.shield : Icons.visibility_off_outlined,
               color: Colors.white,
-              size: active ? 26 : 28,
+              size: 26,
             ),
           ),
         ),

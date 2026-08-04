@@ -31,9 +31,9 @@ class PrivacyVideoState {
       (lastScanScore != null && lastScanScore! < 85 && blurRegions.isEmpty);
 
   String get statusLabel => switch (status) {
-        PrivacyClipStatus.unreviewed => 'Unreviewed',
+        PrivacyClipStatus.unreviewed => 'Needs review',
         PrivacyClipStatus.scanned => 'Scanned',
-        PrivacyClipStatus.protected => 'Protected',
+        PrivacyClipStatus.protected => 'Info hidden',
         PrivacyClipStatus.safeToShare => 'Safe to share',
       };
 

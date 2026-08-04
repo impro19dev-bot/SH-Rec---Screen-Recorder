@@ -278,10 +278,10 @@ class VideosScreenState extends State<VideosScreen> {
     return Column(
       children: [
         VaultScreenHeader(
-          title: 'Clips',
+          title: 'Library',
           subtitle: _videos.isEmpty
-              ? 'Your recordings appear here'
-              : '${_videos.length} clip${_videos.length == 1 ? '' : 's'}',
+              ? 'Import or capture clips, then hide sensitive info'
+              : '${_videos.length} clip${_videos.length == 1 ? '' : 's'} · review before sharing',
           trailing: [
             VaultIconAction(
               icon: Icons.search,
@@ -378,7 +378,7 @@ class VideosScreenState extends State<VideosScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.shield_outlined, color: palette.accent),
-                title: const Text('Open Shield Studio'),
+                title: const Text('Hide info'),
                 onTap: () {
                   Navigator.pop(context);
                   _openPrivacyStudio(video);
@@ -394,7 +394,7 @@ class VideosScreenState extends State<VideosScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.ios_share),
-                title: const Text('Safe Share'),
+                title: const Text('Share protected'),
                 onTap: () {
                   Navigator.pop(context);
                   _shareVideo(video);
@@ -504,7 +504,7 @@ class _ClipsIdleView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Record from Capture or pull down to refresh.',
+            'Import from Photos or capture a clip, then pull down to refresh.',
             textAlign: TextAlign.center,
             style: TextStyle(color: palette.textSecondary),
           ),
@@ -617,7 +617,7 @@ class _EmptyView extends StatelessWidget {
         : 'No screen recordings yet';
     final subtitle = hasSearchQuery
         ? 'Try a different search or clear the filter.'
-        : 'Record from the Record tab. Videos saved to Photos appear here after you refresh.';
+        : 'Capture a clip or save one to Photos, then refresh. Hide sensitive info before sharing.';
 
     return Center(
       child: SingleChildScrollView(

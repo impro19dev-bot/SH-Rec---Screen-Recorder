@@ -66,7 +66,7 @@ class _AppearanceSheet extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Choose how SH Rec looks on your device',
+                            'Choose how SH Shield looks on your device',
                             style: TextStyle(
                               fontSize: 14,
                               color: palette.textSecondary,

@@ -7,24 +7,27 @@ import '../../config/app_config.dart';
 import '../../services/photos_permission_service.dart';
 import '../../models/privacy_video_state.dart';
 import '../../services/privacy_storage_service.dart';
+import '../../services/video_library_service.dart';
 import '../../theme/app_palette.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_design.dart';
 import '../../theme/context_extensions.dart';
+import '../../widgets/privacy_status_badge.dart';
 import '../../widgets/vault_screen_header.dart';
 import '../privacy/privacy_studio_screen.dart';
+import '../privacy/protect_clip_picker_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
     required this.onGoToCapture,
-    required this.onGoToClips,
-    required this.onGoToShield,
+    required this.onGoToLibrary,
+    required this.onGoToProtect,
   });
 
   final VoidCallback onGoToCapture;
-  final VoidCallback onGoToClips;
-  final VoidCallback onGoToShield;
+  final VoidCallback onGoToLibrary;
+  final VoidCallback onGoToProtect;
 
   @override
   State<HomeScreen> createState() => HomeScreenState();
@@ -32,10 +35,11 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   final _storage = PrivacyStorageService.instance;
+  final _library = VideoLibraryService();
   int _clipCount = 0;
   int _needsReview = 0;
   int _protected = 0;
-  List<AssetEntity> _recent = const [];
+  List<AssetEntity> _needsReviewClips = const [];
   Map<String, PrivacyVideoState> _states = {};
   bool _loading = false;
   bool _permissionDenied = false;
@@ -57,37 +61,40 @@ class HomeScreenState extends State<HomeScreen> {
             _clipCount = 0;
             _needsReview = 0;
             _protected = 0;
-            _recent = const [];
+            _needsReviewClips = const [];
             _states = {};
             _loading = false;
           });
         }
         return;
       }
-      final paths = await PhotoManager.getAssetPathList(
-        type: RequestType.video,
-        onlyAll: true,
-      );
-      if (paths.isEmpty) {
-        if (mounted) setState(() => _loading = false);
-        return;
-      }
-      final assets = await paths.first.getAssetListPaged(page: 0, size: 30);
+
+      final assets = await _library.loadVideos(size: 40);
       final states = await _storage.loadMany(assets.map((a) => a.id));
       if (!mounted) return;
+
+      final reviewClips = <AssetEntity>[];
+      var needsReview = 0;
+      var protected = 0;
+      for (final asset in assets) {
+        final state = states[asset.id] ?? PrivacyVideoState.unreviewed(asset.id);
+        if (state.needsReview) {
+          needsReview++;
+          if (reviewClips.length < 8) reviewClips.add(asset);
+        }
+        if (state.status == PrivacyClipStatus.protected ||
+            state.status == PrivacyClipStatus.safeToShare) {
+          protected++;
+        }
+      }
+
       setState(() {
         _permissionDenied = false;
         _clipCount = assets.length;
-        _recent = assets.take(6).toList();
         _states = states;
-        _needsReview = states.values.where((s) => s.needsReview).length;
-        _protected = states.values
-            .where(
-              (s) =>
-                  s.status == PrivacyClipStatus.protected ||
-                  s.status == PrivacyClipStatus.safeToShare,
-            )
-            .length;
+        _needsReviewClips = reviewClips;
+        _needsReview = needsReview;
+        _protected = protected;
         _loading = false;
       });
     } catch (_) {
@@ -100,6 +107,16 @@ class HomeScreenState extends State<HomeScreen> {
         .push(
           MaterialPageRoute<void>(
             builder: (_) => PrivacyStudioScreen(video: video),
+          ),
+        )
+        .then((_) => reload());
+  }
+
+  void _openProtectPicker() {
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ProtectClipPickerScreen(),
           ),
         )
         .then((_) => reload());
@@ -124,7 +141,8 @@ class HomeScreenState extends State<HomeScreen> {
                 ListenableBuilder(
                   listenable: themeController,
                   builder: (context, _) {
-                    final dark = Theme.of(context).brightness == Brightness.dark;
+                    final dark =
+                        Theme.of(context).brightness == Brightness.dark;
                     return VaultIconAction(
                       icon: dark
                           ? Icons.light_mode_outlined
@@ -142,33 +160,44 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+            sliver: SliverToBoxAdapter(
+              child: _HeroProtectCard(
+                needsReview: _needsReview,
+                loading: _loading,
+                onProtect: widget.onGoToProtect,
+                onImport: _openProtectPicker,
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
             sliver: SliverToBoxAdapter(
               child: Row(
                 children: [
                   Expanded(
                     child: _ModeCard(
-                      title: 'Capture',
-                      subtitle: 'Record your screen',
-                      icon: Icons.fiber_manual_record,
+                      title: 'Hide info',
+                      subtitle: 'Scan & blur clips',
+                      icon: Icons.visibility_off_outlined,
                       gradient: const [
                         AppColors.primaryOrange,
                         AppColors.splashOrange,
                       ],
-                      onTap: widget.onGoToCapture,
+                      onTap: widget.onGoToProtect,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: _ModeCard(
-                      title: 'Shield',
-                      subtitle: 'Blur & safe export',
-                      icon: Icons.enhanced_encryption,
+                      title: 'Capture',
+                      subtitle: 'Optional — for new clips',
+                      icon: Icons.videocam_outlined,
                       gradient: const [
+                        Color(0xFFFF8A65),
                         AppColors.primaryOrangeLight,
-                        AppColors.splashOrange,
                       ],
-                      onTap: widget.onGoToShield,
+                      onTap: widget.onGoToCapture,
                     ),
                   ),
                 ],
@@ -192,13 +221,13 @@ class HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Text(
-                    'RECENT CLIPS',
+                    'NEEDS REVIEW',
                     style: AppDesign.sectionLabel(palette.textSecondary),
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: widget.onGoToClips,
-                    child: const Text('See all'),
+                    onPressed: widget.onGoToLibrary,
+                    child: const Text('Library'),
                   ),
                 ],
               ),
@@ -209,30 +238,55 @@ class HomeScreenState extends State<HomeScreen> {
               hasScrollBody: false,
               child: Center(child: CircularProgressIndicator()),
             )
-          else if (_recent.isEmpty)
+          else if (_permissionDenied)
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(32),
                 child: Column(
                   children: [
                     Text(
-                      _permissionDenied
-                          ? 'Photos access is needed to show your recent clips.'
-                          : 'No clips yet. Tap the red capture button to record.',
+                      'Photos access is needed to review and protect your clips.',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: palette.textSecondary),
                     ),
-                    if (_permissionDenied) ...[
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: PhotoManager.openSetting,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryOrange,
-                          foregroundColor: Colors.white,
-                        ),
-                        child: const Text('Open Settings'),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: PhotoManager.openSetting,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryOrange,
+                        foregroundColor: Colors.white,
                       ),
-                    ],
+                      child: const Text('Open Settings'),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else if (_needsReviewClips.isEmpty)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.verified_user_outlined,
+                      size: 40,
+                      color: palette.accent,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      _clipCount == 0
+                          ? 'Nothing to protect yet.\nImport a clip from Photos or capture a new one.'
+                          : 'All recent clips look reviewed.\nImport another clip anytime.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: palette.textSecondary),
+                    ),
+                    const SizedBox(height: 16),
+                    OutlinedButton.icon(
+                      onPressed: _openProtectPicker,
+                      icon: const Icon(Icons.photo_library_outlined),
+                      label: const Text('Protect a clip from Photos'),
+                    ),
                   ],
                 ),
               ),
@@ -243,21 +297,20 @@ class HomeScreenState extends State<HomeScreen> {
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final clip = _recent[index];
+                    final clip = _needsReviewClips[index];
                     final state = _states[clip.id] ??
                         PrivacyVideoState.unreviewed(clip.id);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: _RecentRow(
-                        title: clip.title ?? 'Recording',
+                        title: clip.title ?? 'Clip',
                         duration: _formatDuration(clip.duration),
                         state: state,
                         onProtect: () => _openStudio(clip),
-                        onOpen: widget.onGoToClips,
                       ),
                     );
                   },
-                  childCount: _recent.length,
+                  childCount: _needsReviewClips.length,
                 ),
               ),
             ),
@@ -271,6 +324,105 @@ class HomeScreenState extends State<HomeScreen> {
     final m = seconds ~/ 60;
     final s = seconds % 60;
     return '$m:${s.toString().padLeft(2, '0')}';
+  }
+}
+
+class _HeroProtectCard extends StatelessWidget {
+  const _HeroProtectCard({
+    required this.needsReview,
+    required this.loading,
+    required this.onProtect,
+    required this.onImport,
+  });
+
+  final int needsReview;
+  final bool loading;
+  final VoidCallback onProtect;
+  final VoidCallback onImport;
+
+  @override
+  Widget build(BuildContext context) {
+    final headline = loading
+        ? 'Checking your clips…'
+        : needsReview > 0
+            ? '$needsReview clip${needsReview == 1 ? '' : 's'} need review'
+            : 'Hide sensitive info before you share';
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppColors.privacyNavy, AppColors.privacySurface],
+        ),
+        borderRadius: BorderRadius.circular(AppDesign.radiusLg),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.visibility_off_outlined, color: AppColors.privacyTeal),
+              SizedBox(width: 10),
+              Text(
+                'Privacy first',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            headline,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Scan for emails and phone numbers, blur what matters, then share a safer copy — on your device.',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.82),
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton(
+                  onPressed: onProtect,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.primaryOrange,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Review & hide'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: onImport,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    side: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.45),
+                    ),
+                  ),
+                  child: const Text('Import clip'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -353,13 +505,21 @@ class _StatsStrip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _Stat(value: loading ? '—' : '$clips', label: 'Clips', palette: palette),
-          _divider(palette),
-          _Stat(value: loading ? '—' : '$review', label: 'Review', palette: palette),
+          _Stat(
+            value: loading ? '—' : '$review',
+            label: 'To hide',
+            palette: palette,
+          ),
           _divider(palette),
           _Stat(
             value: loading ? '—' : '$protected',
-            label: 'Shielded',
+            label: 'Protected',
+            palette: palette,
+          ),
+          _divider(palette),
+          _Stat(
+            value: loading ? '—' : '$clips',
+            label: 'Clips',
             palette: palette,
           ),
         ],
@@ -414,14 +574,12 @@ class _RecentRow extends StatelessWidget {
     required this.duration,
     required this.state,
     required this.onProtect,
-    required this.onOpen,
   });
 
   final String title;
   final String duration;
   final PrivacyVideoState state;
   final VoidCallback onProtect;
-  final VoidCallback onOpen;
 
   @override
   Widget build(BuildContext context) {
@@ -431,7 +589,7 @@ class _RecentRow extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppDesign.radiusMd),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onOpen,
+        onTap: onProtect,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Row(
@@ -443,7 +601,7 @@ class _RecentRow extends StatelessWidget {
                   color: palette.accentSoft,
                   borderRadius: BorderRadius.circular(AppDesign.radiusSm),
                 ),
-                child: Icon(Icons.movie_outlined, color: palette.accent),
+                child: Icon(Icons.visibility_off_outlined, color: palette.accent),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -459,19 +617,34 @@ class _RecentRow extends StatelessWidget {
                         color: palette.textPrimary,
                       ),
                     ),
-                    Text(
-                      '$duration · ${state.statusLabel}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: palette.textSecondary,
-                      ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Text(
+                          duration,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: palette.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        PrivacyStatusBadge(state: state, compact: true),
+                        const SizedBox(width: 4),
+                        Text(
+                          state.statusLabel,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: palette.textSecondary,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
               TextButton(
                 onPressed: onProtect,
-                child: const Text('Shield'),
+                child: const Text('Hide'),
               ),
             ],
           ),

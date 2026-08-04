@@ -1,7 +1,7 @@
 name: sh_rec
-description: SH Rec - Privacy-first screen recorder
+description: SH Shield - Hide info before you share (iOS)
 publish_to: 'none'
-version: 1.0.0+2
+version: 1.1.0+3
 
 environment:
   sdk: ^3.11.0
@@ -10,7 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.5.3
-  flutter_screen_recording: ^2.0.18
   photo_manager: ^3.7.1
   video_player: ^2.10.0
   share_plus: ^11.0.0
@@ -33,7 +32,7 @@ flutter:
     - assets/images/app_icon.png
 
 flutter_launcher_icons:
-  android: true
+  android: false
   ios: true
   image_path: assets/images/app_icon.png
   remove_alpha_ios: true

@@ -1,4 +1,4 @@
-# BroadcastUploadExtension setup (SH Rec)
+# BroadcastUploadExtension setup (SH Shield)
 
 ## Apple Developer portal
 

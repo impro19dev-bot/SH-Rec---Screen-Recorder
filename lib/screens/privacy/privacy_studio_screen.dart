@@ -116,6 +116,15 @@ class _PrivacyStudioScreenState extends State<PrivacyStudioScreen> {
     const defaultH = 0.12;
     var left = (normalized.dx - defaultW / 2).clamp(0.0, 1.0 - defaultW);
     var top = (normalized.dy - defaultH / 2).clamp(0.0, 1.0 - defaultH);
+    _insertRegion(left: left, top: top, width: defaultW, height: defaultH);
+  }
+
+  void _insertRegion({
+    required double left,
+    required double top,
+    required double width,
+    required double height,
+  }) {
     final id = const Uuid().v4();
     setState(() {
       _regions = [
@@ -124,13 +133,41 @@ class _PrivacyStudioScreenState extends State<PrivacyStudioScreen> {
           id: id,
           left: left,
           top: top,
-          width: defaultW,
-          height: defaultH,
+          width: width,
+          height: height,
         ),
       ];
       _selectedId = id;
     });
     unawaited(_persistState(status: PrivacyClipStatus.protected));
+  }
+
+  Future<void> _blurForFinding(PrivacyFinding finding) async {
+    final controller = _controller;
+    if (controller != null && controller.value.isInitialized) {
+      final duration = controller.value.duration;
+      if (duration > Duration.zero) {
+        final ms = (duration.inMilliseconds * finding.timeFraction)
+            .round()
+            .clamp(0, duration.inMilliseconds);
+        await controller.seekTo(Duration(milliseconds: ms));
+        await controller.pause();
+      }
+    }
+    if (!mounted) return;
+
+    // Suggested band where on-screen text commonly sits (OCR has no boxes yet).
+    const width = 0.58;
+    const height = 0.13;
+    final left = ((1.0 - width) / 2).clamp(0.0, 1.0 - width);
+    final top = switch (finding.type) {
+      PrivacyFindingType.email => 0.16,
+      PrivacyFindingType.phone => 0.40,
+      PrivacyFindingType.other => 0.30,
+    };
+
+    _insertRegion(left: left, top: top, width: width, height: height);
+    _showSnack('Blur placed — drag to cover “${finding.label}”.');
   }
 
   void _moveRegion(String id, Offset delta) {
@@ -296,34 +333,62 @@ class _PrivacyStudioScreenState extends State<PrivacyStudioScreen> {
                   'No emails or phone numbers detected in sampled frames.',
                   style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
                 )
-              else
+              else ...[
+                Text(
+                  'Tap a finding to place a blur and jump to that moment.',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 ...result.findings.map(
                   (f) => Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          f.type == PrivacyFindingType.email
-                              ? Icons.email_outlined
-                              : Icons.phone_outlined,
-                          size: 18,
-                          color: AppColors.privacyTeal,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            '${f.typeLabel}: ${f.label}\n${f.timeLabel}',
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.9),
-                              height: 1.35,
-                            ),
+                    child: Material(
+                      color: Colors.white.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(12),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () {
+                          Navigator.pop(context);
+                          unawaited(_blurForFinding(f));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                f.type == PrivacyFindingType.email
+                                    ? Icons.email_outlined
+                                    : Icons.phone_outlined,
+                                size: 18,
+                                color: AppColors.privacyTeal,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  '${f.typeLabel}: ${f.label}\n${f.timeLabel} · Tap to hide',
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.9),
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ),
+                              Icon(
+                                Icons.blur_on,
+                                size: 18,
+                                color: Colors.white.withValues(alpha: 0.7),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
+              ],
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
@@ -349,7 +414,7 @@ class _PrivacyStudioScreenState extends State<PrivacyStudioScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.privacyNavy,
         foregroundColor: Colors.white,
-        title: const Text('Shield Studio'),
+        title: const Text('Hide Info'),
         actions: [
           if (_state != null)
             Padding(
@@ -467,7 +532,7 @@ class _StudioToolbar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Tap video to add blur · Drag to move · $regionCount region${regionCount == 1 ? '' : 's'}',
+            'Tap video to hide info · Drag blur · $regionCount region${regionCount == 1 ? '' : 's'}',
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.7),
               fontSize: 13,
@@ -501,7 +566,7 @@ class _StudioToolbar extends StatelessWidget {
               ),
               _ToolChip(
                 icon: Icons.ios_share,
-                label: 'Share',
+                label: 'Share protected',
                 onTap: busy ? null : onShare,
               ),
             ],

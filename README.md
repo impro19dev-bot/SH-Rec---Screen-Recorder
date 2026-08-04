@@ -1,19 +1,19 @@
-# SH Rec - Screen Recorder
+# SH Shield
 
-Screen recorder with on-device privacy tools for iOS and Android.
-
-Record locally, then use Shield Studio to scan for sensitive text, blur regions, and export a safe copy before sharing.
+On-device privacy tool for screen clips. Scan for sensitive text, blur what matters, and share a safer copy. Capture is optional.
 
 ## Features
 
-- Full-device recording (ReplayKit) with optional mic
-- Clips library with search and sort
-- Shield Studio — OCR scan, Privacy Score, blur, safe export
-- Safe Share confirmation
+- Protect / Hide Info — OCR scan, Privacy Score, blur, safe export
+- Protect any video from Photos (not only in-app captures)
+- Tap scan findings to place blur and jump to that moment
+- Needs-review queue and privacy status badges
+- Optional screen capture via ReplayKit
 - No ads · No account · No cloud upload of videos
 
 ## Identifiers
 
+- Display name: **SH Shield**
 - Bundle ID: `com.azrecorder.screenrecording`
 - App Group: `group.com.azrecorder.screenrecorder.sharedPreferences`
 
@@ -26,4 +26,4 @@ flutter pub get
 flutter run
 ```
 
-Full-device recording needs a physical iPhone.
+Full-device capture needs a physical iPhone.

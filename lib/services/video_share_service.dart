@@ -14,6 +14,7 @@ class VideoShareService {
   Future<bool> shareAsset(BuildContext context, AssetEntity video) async {
     final file = await resolveShareableFile(video);
     if (file == null) return false;
+    if (!context.mounted) return false;
     return shareFile(context, file);
   }
 
@@ -22,12 +23,13 @@ class VideoShareService {
     if (!file.existsSync()) return false;
     if (!context.mounted) return false;
 
+    // Capture share origin before awaits so we never use a stale context layout.
+    final origin = _shareOrigin(context);
+    final mime = _mimeForPath(file.path);
+
     // Let any closing dialog/route finish before presenting the sheet.
     await Future<void>.delayed(const Duration(milliseconds: 50));
     if (!context.mounted) return false;
-
-    final origin = _shareOrigin(context);
-    final mime = _mimeForPath(file.path);
 
     try {
       await SharePlus.instance.share(
@@ -45,7 +47,7 @@ class VideoShareService {
         await SharePlus.instance.share(
           ShareParams(
             files: [XFile(copy.path, mimeType: mime)],
-            sharePositionOrigin: origin ?? _shareOrigin(context),
+            sharePositionOrigin: origin,
           ),
         );
         return true;
@@ -56,14 +58,10 @@ class VideoShareService {
   }
 
   Future<File?> resolveShareableFile(AssetEntity video) async {
-    File? file = await video.originFile;
-    if (file != null && file.existsSync()) {
-      return file;
-    }
-    file = await video.file;
-    if (file != null && file.existsSync()) {
-      return file;
-    }
+    final origin = await video.originFile;
+    if (origin != null && origin.existsSync()) return origin;
+    final file = await video.file;
+    if (file != null && file.existsSync()) return file;
     return null;
   }
 
@@ -82,7 +80,7 @@ class VideoShareService {
     }
   }
 
-  Rect? _shareOrigin(BuildContext context) {
+  Rect _shareOrigin(BuildContext context) {
     final box = context.findRenderObject() as RenderBox?;
     if (box == null || !box.hasSize) {
       final size = MediaQuery.sizeOf(context);

@@ -22,44 +22,45 @@ class OnboardingPageData {
 
 const onboardingPages = [
   OnboardingPageData(
-    title: 'Privacy-first recording',
+    title: 'Hide info before you share',
     description:
-        'Record your screen on-device — no account, no cloud upload. '
-        'Your clips stay in Photos until you choose to share them.',
+        'SH Shield helps you find and cover sensitive details in screen clips — '
+        'emails, phone numbers, and personal UI — before anyone else sees them.',
     features: [
-      'Full-device screen recording',
-      'Saved locally to Photos',
-      'No sign-in required',
+      'On-device privacy scan',
+      'Blur sensitive spots',
+      'No account · No cloud upload',
     ],
-    icon: Icons.shield_outlined,
+    icon: Icons.visibility_off_outlined,
     colors: [Color(0xFFFF8A65), Color(0xFFFF5722)],
     accentColor: AppColors.primaryOrange,
   ),
   OnboardingPageData(
-    title: 'Record with confidence',
-    description:
-        'Start Recording opens Apple’s broadcast picker. Turn the microphone '
-        'on in Apple’s sheet when you need audio.',
-    features: [
-      'Apple broadcast picker',
-      'Microphone for audio',
-      'Optional in-app recording',
-    ],
-    icon: Icons.fiber_manual_record_rounded,
-    colors: [Color(0xFFFFB74D), Color(0xFFF57C00)],
-    accentColor: AppColors.splashOrange,
-  ),
-  OnboardingPageData(
     title: 'Protect with Shield Studio',
     description:
-        'Scan for emails and phone numbers, blur sensitive areas, and export a safe copy — all on your device.',
+        'Scan clips for emails and phone numbers, check your Privacy Score, '
+        'add blur regions, and export a safer copy — all on your device.',
     features: [
-      'Privacy Score scan',
-      'Manual blur regions',
-      'Safe export to Photos',
+      'Privacy Score',
+      'Tap findings to place blur',
+      'Safe export before sharing',
     ],
     icon: Icons.verified_user_outlined,
     colors: [Color(0xFFFFAB91), Color(0xFFFF7043)],
     accentColor: AppColors.primaryOrangeLight,
+  ),
+  OnboardingPageData(
+    title: 'Capture only when you need a clip',
+    description:
+        'Recording is optional. Import any video from Photos to protect, '
+        'or capture a new clip and hide sensitive info before you share.',
+    features: [
+      'Protect clips from Photos',
+      'Optional screen capture',
+      'Share only when ready',
+    ],
+    icon: Icons.shield_outlined,
+    colors: [Color(0xFFFFB74D), Color(0xFFF57C00)],
+    accentColor: AppColors.splashOrange,
   ),
 ];

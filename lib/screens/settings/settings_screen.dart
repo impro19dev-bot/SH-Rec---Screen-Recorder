@@ -56,14 +56,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text('Privacy Policy'),
         content: const SingleChildScrollView(
           child: Text(
-            'SH Rec saves screen recordings to your device Photos library. '
-            'Recordings stay on your device unless you choose to share them.\n\n'
-            'Shield Studio scans for emails and phone numbers on-device, lets you '
+            'SH Shield helps you hide sensitive information in screen clips before sharing. '
+            'Clips stay on your device unless you choose to share them.\n\n'
+            'Protect / Hide Info scans for emails and phone numbers on-device, lets you '
             'add blur regions, and can export a redacted copy — no account required '
             'and no video content is uploaded to our servers.\n\n'
-            'Photos access is requested on Home and Clips to show your recordings, '
-            'and when you start recording. '
-            'Microphone access is optional during a broadcast.\n\n'
+            'Photos access is used to show and protect clips in your library. '
+            'Microphone access is optional if you capture with audio.\n\n'
             'Read the full privacy policy on our website.',
           ),
         ),
@@ -151,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         _MenuTile(
           icon: Icons.help_outline_rounded,
-          title: 'Recording guide',
+          title: 'Capture guide',
           onTap: () => showRecordingHelpDialog(context, isSimulator: _isSimulator),
         ),
         _MenuTile(
@@ -180,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            'All recordings and privacy scans stay on your device.',
+            'Hide sensitive info on-device. Capture is optional.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: palette.textSecondary),
           ),

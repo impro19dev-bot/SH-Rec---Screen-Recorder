@@ -4,6 +4,7 @@ import 'package:photo_manager/photo_manager.dart';
 import '../../services/photos_permission_service.dart';
 import '../../models/privacy_video_state.dart';
 import '../../services/privacy_storage_service.dart';
+import '../../services/video_library_service.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_design.dart';
 import '../../theme/context_extensions.dart';
@@ -11,6 +12,7 @@ import '../../widgets/privacy_status_badge.dart';
 import '../../widgets/vault_screen_header.dart';
 import '../tools/video_info_picker_screen.dart';
 import 'privacy_studio_screen.dart';
+import 'protect_clip_picker_screen.dart';
 
 class PrivacyScreen extends StatefulWidget {
   const PrivacyScreen({super.key});
@@ -21,6 +23,7 @@ class PrivacyScreen extends StatefulWidget {
 
 class PrivacyScreenState extends State<PrivacyScreen> {
   final _storage = PrivacyStorageService.instance;
+  final _library = VideoLibraryService();
   int _needsReview = 0;
   int _protected = 0;
   List<AssetEntity> _recentClips = const [];
@@ -30,6 +33,7 @@ class PrivacyScreenState extends State<PrivacyScreen> {
   @override
   void initState() {
     super.initState();
+    reload();
   }
 
   Future<void> reload() => _loadDashboard();
@@ -64,26 +68,18 @@ class PrivacyScreenState extends State<PrivacyScreen> {
         return;
       }
 
-      final paths = await PhotoManager.getAssetPathList(
-        type: RequestType.video,
-        onlyAll: true,
-      );
-      if (paths.isEmpty) {
-        if (mounted) setState(() => _loading = false);
-        return;
-      }
+      final assets = await _library.loadVideos(size: 40);
+      final states = await _storage.loadMany(assets.map((a) => a.id));
 
-      final assets = await paths.first.getAssetListPaged(page: 0, size: 40);
-      final ids = assets.map((a) => a.id);
-      final states = await _storage.loadMany(ids);
-      final needsReview = states.values.where((s) => s.needsReview).length;
-      final protected = states.values
-          .where(
-            (s) =>
-                s.status == PrivacyClipStatus.protected ||
-                s.status == PrivacyClipStatus.safeToShare,
-          )
-          .length;
+      var needsReview = 0;
+      var protected = 0;
+      for (final state in states.values) {
+        if (state.needsReview) needsReview++;
+        if (state.status == PrivacyClipStatus.protected ||
+            state.status == PrivacyClipStatus.safeToShare) {
+          protected++;
+        }
+      }
 
       if (!mounted) return;
       setState(() {
@@ -114,6 +110,16 @@ class PrivacyScreenState extends State<PrivacyScreen> {
     );
   }
 
+  void _openProtectPicker() {
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ProtectClipPickerScreen(),
+          ),
+        )
+        .then((_) => _loadDashboard());
+  }
+
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
@@ -126,8 +132,8 @@ class PrivacyScreenState extends State<PrivacyScreen> {
           slivers: [
           SliverToBoxAdapter(
             child: VaultScreenHeader(
-              title: 'Shield',
-              subtitle: 'Protect sensitive information in your clips',
+              title: 'Protect',
+              subtitle: 'Hide emails, numbers, and personal UI before sharing',
             ),
           ),
           SliverPadding(
@@ -150,10 +156,13 @@ class PrivacyScreenState extends State<PrivacyScreen> {
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.shield, color: AppColors.privacyTeal),
+                        Icon(
+                          Icons.visibility_off_outlined,
+                          color: AppColors.privacyTeal,
+                        ),
                         SizedBox(width: 10),
                         Text(
-                          'On-device protection',
+                          'On-device redaction',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -164,7 +173,7 @@ class PrivacyScreenState extends State<PrivacyScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Scan for sensitive text, blur regions, and export a safe copy — all on your device.',
+                      'Scan for sensitive text, blur what matters, and export a safer copy — all on your device. Capture is optional.',
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.82),
                         height: 1.4,
@@ -186,6 +195,19 @@ class PrivacyScreenState extends State<PrivacyScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton.icon(
+                        onPressed: _openProtectPicker,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.primaryOrange,
+                          foregroundColor: Colors.white,
+                        ),
+                        icon: const Icon(Icons.photo_library_outlined),
+                        label: const Text('Protect a clip from Photos'),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -201,7 +223,7 @@ class PrivacyScreenState extends State<PrivacyScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(32),
                   child: Text(
-                    'Record a video, then return here to protect it before sharing.',
+                    'Import any video from Photos to hide sensitive info, or capture a new clip when you need one.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: palette.textSecondary),
                   ),
@@ -212,7 +234,7 @@ class PrivacyScreenState extends State<PrivacyScreen> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                   child: Text(
-                    'Recent recordings',
+                    'Recent clips',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -232,7 +254,7 @@ class PrivacyScreenState extends State<PrivacyScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: _RecentClipCard(
-                          title: clip.title ?? 'Screen Recording',
+                          title: clip.title ?? 'Clip',
                           state: state,
                           onProtect: () => _openStudio(clip),
                         ),

@@ -1,4 +1,4 @@
-# Codemagic iOS release for SH Rec.
+# Codemagic iOS release for SH Shield.
 # Requires App Store Connect integration + 3 App Store profiles (app + 2 extensions).
 
 workflows:
